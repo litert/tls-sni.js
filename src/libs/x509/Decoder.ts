@@ -16,6 +16,8 @@
 
 import * as C from "./Common";
 import * as DER from "../der";
+import * as U from "./Utility";
+import * as O from "./OID";
 
 const X509_START = "-----BEGIN CERTIFICATE-----";
 const X509_ENDING = "-----END CERTIFICATE-----";
@@ -67,20 +69,115 @@ class X509Decoder implements C.IDecoder {
             throw new Error("Not a valid X.509 certificate.");
         }
 
-        const data: C.TSkeleton = this._der.decode(cert) as any;
+        const derStruct: C.TSkeleton = this._der.decode(cert) as any;
 
-        this._parseSignature(data, ret);
+        this._readAlgorithm(
+            derStruct.data[1],
+            ret.signature.algorithm
+        );
+
+        ret.signature.value = derStruct.data[2].data;
+
+        const tbsc = derStruct.data[0].data;
+        ret.details.version = tbsc[0].data.data + 1;
+
+        ret.details.serial = tbsc[1].data as Buffer;
+
+        this._readAlgorithm(tbsc[2], ret.details.algorithm);
+
+        this._readIssuerInfo(tbsc[3], ret.details.issuer);
+
+        ret.details.validity.notBefore = tbsc[4].data[0].data;
+
+        ret.details.validity.notAfter = tbsc[4].data[1].data;
+
+        this._readIssuerInfo(tbsc[5], ret.details.subject);
+
+        ret.details.validity.notBefore = tbsc[4].data[0].data;
+
+        ret.details.validity.notAfter = tbsc[4].data[1].data;
+
+        this._readAlgorithm(
+            tbsc[6].data[0],
+            ret.details.publicKey.algorithm
+        );
+
+        for (let i = 7; i < tbsc.length; i++) {
+
+            const prop = tbsc[i];
+
+            if (!prop || prop.tag.class !== DER.ETClass.CONTEXT) {
+
+                continue;
+            }
+
+            switch (prop.tag.type) {
+            case 1:
+                ret.details.issuerUniqueID = prop.data.data;
+                break;
+            case 2:
+                ret.details.subjectUniqueID = prop.data.data;
+                break;
+            case 3:
+
+                for (let x of prop.data.data) {
+
+                    const extInfo: C.IExtensionItem = {
+                        value: null,
+                        critical: x.data.length === 3
+                    };
+
+                    let extData: DER.IElement;
+
+                    switch (x.data[0].data) {
+                    case O.X509_EXT_KEY_USAGE:
+
+                        extData = this._der.decode(x.data[2].data);
+
+                        // tslint:disable-next-line:no-bitwise
+                        extInfo.value = extData.data.value[0] >> extData.data.appended;
+
+                        break;
+
+                    case O.X509_EXT_SUBJ_ALTER_NAMES:
+
+                        extData = this._der.decode(x.data[1].data);
+                        extInfo.value = extData.data.map(
+                            (d: DER.IElement) => d.data.toString()
+                        );
+
+                        break;
+                    default:
+
+                        extInfo.value = x.data[extInfo.critical ? 2 : 1].data;
+                    }
+
+                    ret.details.extensions[U.oid2Name(x.data[0].data)] = extInfo;
+                }
+                break;
+            }
+        }
+
+        ret.details.publicKey.value = tbsc[6].data[1].data;
 
         return ret;
     }
 
-    private _parseSignature(dc: C.TSkeleton, output: C.ICertificate): void {
+    private _readIssuerInfo(
+        data: DER.TSequence<Array<DER.TSet<DER.TSequence<[DER.TOID, DER.IElement]>>>>,
+        output: Record<string, any>
+    ): void {
 
-        const signAlgo = dc.data[1];
+        for (let x of data.data) {
 
-        output.signature.algorithm.name = C.OID_NAMES[signAlgo.data[0].data];
-        output.signature.algorithm.args = signAlgo.data[1].data;
-        output.signature.value = dc.data[2].data;
+            output[U.oid2Name(x.data[0].data[0].data)] = x.data[0].data[1].data;
+        }
+    }
+
+    private _readAlgorithm(dc: DER.IElement, output: C.IAlgorithm): void {
+
+        output.name = U.oid2Name(dc.data[0].data);
+        output.args = dc.data[1].data;
     }
 
     public isPEM(cert: Buffer | string): boolean {

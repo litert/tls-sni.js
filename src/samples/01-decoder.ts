@@ -18,7 +18,9 @@
 
 import * as Certs from "../libs";
 import * as FS from "fs";
-const TEST_CERT = FS.readFileSync(__dirname + "/../test/sample.crt");
+const TEST_CERT = FS.readFileSync(
+    __dirname + "/../test/sample.crt"
+);
 
 const der = Certs.der.createDecoder();
 
@@ -34,4 +36,10 @@ Certs.der.print(
 
 const ret = x509.decode(TEST_CERT);
 
-console.log(JSON.stringify(ret, null, 2));
+console.log(JSON.stringify(ret, function(k, v): any {
+    if (typeof v === "object" && v !== null && "data" in v && v.type === "Buffer") {
+
+        return Buffer.from(v.data).toString("base64");
+    }
+    return v;
+}, 2));

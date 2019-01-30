@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-export * from "./Common";
-export * from "./Decoder";
-export * from "./Utility";
+import * as O from "./OID";
+
+export function oid2Name(oid: string): string {
+
+    return O.OID_TO_NAME[oid] || oid;
+}
+
+export function name2OID(name: string): string | null {
+
+    return O.OID_FROM_NAME[name] || null;
+}
