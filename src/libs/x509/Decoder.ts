@@ -147,6 +147,35 @@ class X509Decoder implements C.IDecoder {
                         );
 
                         break;
+
+                    case O.X509_EXT_EX_KEY_USAGE:
+
+                        extInfo.value = this._der.decode(x.data[1].data).data.map(
+                            (v: any) => v.data
+                        );
+
+                        break;
+
+                    case O.X509_EXT_EX_KEY_USAGE:
+
+                        extInfo.value = this._der.decode(x.data[1].data).data.map(
+                            (v: any) => v.data
+                        );
+
+                        break;
+
+                    case O.X509_EXT_BASIC_CONSTRAINTS:
+
+                        extInfo.value = x.data[1].data;
+
+                        break;
+
+                    case O.X509_EXT_SUBJ_IDENTIFIER:
+
+                        extInfo.value = this._der.decode(x.data[1].data).data;
+
+                        break;
+
                     default:
 
                         extInfo.value = x.data[extInfo.critical ? 2 : 1].data;

@@ -18,6 +18,12 @@ export const X509_EXT_KEY_USAGE = "2.5.29.15";
 
 export const X509_EXT_SUBJ_ALTER_NAMES = "2.5.29.17";
 
+export const X509_EXT_EX_KEY_USAGE = "2.5.29.37";
+
+export const X509_EXT_BASIC_CONSTRAINTS = "2.5.29.19";
+
+export const X509_EXT_SUBJ_IDENTIFIER = "2.5.29.14";
+
 export const OID_TO_NAME: Record<string, string> = {
 
     "1.3.6.1.4.1.11129.2.4.2": "Certificate Transparency",
@@ -91,12 +97,12 @@ export const OID_TO_NAME: Record<string, string> = {
     "2.5.29.3": "Certificate Policies",
     "2.5.29.4": "Primary Key Usage Restriction",
     "2.5.29.9": "Subject Directory Attributes",
-    "2.5.29.14": "Subject Key Identifier",
+    [X509_EXT_SUBJ_IDENTIFIER]: "Subject Key Identifier",
     [X509_EXT_KEY_USAGE]: "Key Usage",
     "2.5.29.16": "Private Key Usage Period",
     [X509_EXT_SUBJ_ALTER_NAMES]: "Subject Alternative Name",
     "2.5.29.18": "Issuer Alternative Name",
-    "2.5.29.19": "Basic Constraints",
+    [X509_EXT_BASIC_CONSTRAINTS]: "Basic Constraints",
     "2.5.29.20": "CRL Number",
     "2.5.29.21": "Reason code",
     "2.5.29.23": "Hold Instruction Code",
@@ -110,9 +116,10 @@ export const OID_TO_NAME: Record<string, string> = {
     "2.5.29.33": "Policy Mappings",
     "2.5.29.35": "Authority Key Identifier",
     "2.5.29.36": "Policy Constraints",
-    "2.5.29.37": "Extended key usage",
+    [X509_EXT_EX_KEY_USAGE]: "Extended key usage",
     "2.5.29.46": "Freshest CRL",
     "2.5.29.54": "X.509 v3 Extension",
+    "1.3.6.1.5.5.7.1.1": "Authority Info Access"
 };
 
 export const OID_FROM_NAME: Record<string, string> = (function() {
