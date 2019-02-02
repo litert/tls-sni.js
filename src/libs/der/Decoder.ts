@@ -16,6 +16,7 @@
 
 // tslint:disable:no-bitwise
 import * as C from "./Common";
+import * as E from "../Errors";
 
 class Decoder implements C.IDecoder {
 
@@ -66,8 +67,8 @@ class Decoder implements C.IDecoder {
 
                 return this._decodeNest(tag, data, offset);
             }
+
             return this._decodeRawData(tag, data, offset);
-            // throw new Error(`${ETagClass[tag.class]} type of tag is not supported yet.`);
         }
     }
 
@@ -308,7 +309,7 @@ class Decoder implements C.IDecoder {
 
             if (o === data.length) {
 
-                throw new Error("Unexpected ending while reading tag type.");
+                throw new E.E_UNEXPECTED_ENDING();
             }
 
             return [o + 1, {
@@ -323,7 +324,9 @@ class Decoder implements C.IDecoder {
 
         if (data[offset] === 0x80) {
 
-            throw new Error(`Unlimited length definition is not supported yet.`);
+            throw new E.E_UNSUPPORTED_BER_FEATURE({
+                message: `Unlimited length definition is not supported yet.`
+            });
         }
 
         if (data[offset] < 0x80) {
@@ -335,7 +338,7 @@ class Decoder implements C.IDecoder {
 
         if (lenBytes + offset >= data.length) {
 
-            throw new Error("Unexpected ending while reading tag length.");
+            throw new E.E_UNEXPECTED_ENDING();
         }
 
         let o = offset + 1;

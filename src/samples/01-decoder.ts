@@ -16,17 +16,18 @@
 
 // tslint:disable:no-console
 
-import * as Certs from "../libs";
+import * as SNI from "../libs";
 import * as FS from "fs";
+
 const TEST_CERT = FS.readFileSync(
     __dirname + "/../test/sample.crt"
 );
 
-const der = Certs.der.createDecoder();
+const der = SNI.der.createDecoder();
 
-const x509 = Certs.x509.createDecoder();
+const x509 = SNI.x509.createDecoder();
 
-Certs.der.print(
+SNI.der.print(
     der.decode(x509.pem2DER(TEST_CERT)),
     function(text, depth): void {
 

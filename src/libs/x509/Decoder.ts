@@ -18,6 +18,7 @@ import * as C from "./Common";
 import * as DER from "../der";
 import * as U from "./Utility";
 import * as O from "./OID";
+import * as E from "../Errors";
 
 const X509_START = "-----BEGIN CERTIFICATE-----";
 const X509_ENDING = "-----END CERTIFICATE-----";
@@ -66,7 +67,7 @@ class X509Decoder implements C.IDecoder {
         }
         else if (!this.isDER(cert)) {
 
-            throw new Error("Not a valid X.509 certificate.");
+            throw new E.E_INVALID_X509();
         }
 
         const derStruct: C.TSkeleton = this._der.decode(cert) as any;
@@ -237,7 +238,7 @@ class X509Decoder implements C.IDecoder {
 
         if (!cert.startsWith(X509_START) || ep === -1) {
 
-            throw new Error("Not a X.509 certificate in PEM format.");
+            throw new E.E_INVALID_X509();
         }
 
         return Buffer.from(

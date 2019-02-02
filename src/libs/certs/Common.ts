@@ -14,8 +14,25 @@
  * limitations under the License.
  */
 
-import * as der from "./der";
-import * as x509 from "./x509";
-import * as certs from "./certs";
+import * as TLS from "tls";
+import * as X509 from "../x509";
 
-export { der, x509, certs };
+export type TSNICallback = TLS.TlsOptions["SNICallback"];
+
+export interface ICertificateManager {
+
+    remove(name: string): boolean;
+
+    set(
+        name: string,
+        cert: Buffer | string,
+        privateKey: Buffer | string,
+        extOptions?: TLS.SecureContextOptions
+    ): this;
+
+    test(hostname: string): string | null;
+
+    getCertificate(name: string): X509.ICertificate;
+
+    getSNICallback(): TSNICallback;
+}
