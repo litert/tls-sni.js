@@ -5,18 +5,13 @@ CA_ROOT=test/ca
 mkdir -p $CA_ROOT
 
 CA_ROOT=$(cd $CA_ROOT; pwd)
-CA_PRIV_KEY=$CA_ROOT/ca.private.pem
-CA_PUB_KEY=$CA_ROOT/ca.public.pem
-CA_CERT=$CA_ROOT/ca.cert.pem
+CA_PRIV_KEY=$CA_ROOT/key.pem
+CA_CERT=$CA_ROOT/cert.pem
 CA_CONF_FILE=$CA_ROOT/ca.conf
 
 # Generate CA Private Key
 
 openssl genrsa -out $CA_PRIV_KEY 2048
-
-# Generate CA Public Key
-
-openssl rsa -in $CA_PRIV_KEY -pubout -out $CA_PUB_KEY
 
 # Generate Certificate for CA
 
@@ -44,8 +39,8 @@ echo "[ local ]" >> $CA_CONF_FILE
 echo "serial = $CA_BASEDIR/serial" >> $CA_CONF_FILE
 echo "database = $CA_BASEDIR/index.txt" >> $CA_CONF_FILE
 echo "new_certs_dir = $CA_BASEDIR/../certs" >> $CA_CONF_FILE
-echo "certificate = $CA_BASEDIR/ca.cert.pem" >> $CA_CONF_FILE
-echo "private_key = $CA_BASEDIR/ca.private.pem" >> $CA_CONF_FILE
+echo "certificate = $CA_BASEDIR/cert.pem" >> $CA_CONF_FILE
+echo "private_key = $CA_BASEDIR/key.pem" >> $CA_CONF_FILE
 echo "default_md = sha256" >> $CA_CONF_FILE
 echo "default_days = 365" >> $CA_CONF_FILE
 echo "policy = my_policy" >> $CA_CONF_FILE
