@@ -7,8 +7,19 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/TLS-SNI.js] Sample 01 - Decoder",
+            "name": "[LiteRT/TLS-SNI.js] Sample 01 - X.509 Decoder",
             "program": "${workspaceFolder}/src/samples/01-decoder.ts",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/libs/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/TLS-SNI.js] Sample 02 - Certificates Manager",
+            "program": "${workspaceFolder}/src/samples/02-certificates.ts",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/samples/*.js",

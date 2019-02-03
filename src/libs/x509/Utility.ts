@@ -16,11 +16,21 @@
 
 import * as O from "./OID";
 
+/**
+ * Translate an OID to its readable name.
+ *
+ * @param oid The OID to be translated.
+ */
 export function oid2Name(oid: string): string {
 
     return O.OID_TO_NAME[oid] || oid;
 }
 
+/**
+ * Translate an OID from its readable name.
+ *
+ * @param oid The readable name of an OID.
+ */
 export function name2OID(name: string): string | null {
 
     return O.OID_FROM_NAME[name] || null;

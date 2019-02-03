@@ -53,3 +53,9 @@ export const E_UNSUPPORTED_BER_FEATURE = ErrorHub.define(
     "E_NOT_SUPPORTED_BER_FEATURE",
     "Unsupported BER feature was found."
 );
+
+export const E_INVALID_WILDCARD = ErrorHub.define(
+    null,
+    "E_INVALID_WILDCARD",
+    "Invalid wildcard subject in certificate."
+);

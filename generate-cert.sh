@@ -77,6 +77,7 @@ openssl req \
     -extensions my_extensions
 
 openssl ca \
+    -batch \
     -config $CA_CONF_FILE \
     -out $CERT_FILE \
     -infiles $CSR_FILE

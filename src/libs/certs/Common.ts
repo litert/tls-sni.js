@@ -21,18 +21,55 @@ export type TSNICallback = TLS.TlsOptions["SNICallback"];
 
 export interface ICertificateManager {
 
+    /**
+     * Remove a existed certificate by its name.
+     *
+     * @param name The name of certificate to be removed.
+     */
     remove(name: string): boolean;
 
-    set(
+    /**
+     * Setup a certificate. If the name of certificate already exists, the
+     * current certificate will be overwritten.
+     *
+     * @param name          The name of new certificate.
+     * @param cert          The content of new certificate.
+     * @param privateKey    The content of private key against the new certificate.
+     * @param extOptions    (Optional) Extra options for the TLS secure context.
+     */
+    use(
         name: string,
         cert: Buffer | string,
         privateKey: Buffer | string,
         extOptions?: TLS.SecureContextOptions
     ): this;
 
+    /**
+     * Check and find the name of certificate that the specific hostname will
+     * use.
+     *
+     * If no matched certificate, null will be returned.
+     *
+     * @param hostname  The hostname to be tested.
+     */
     test(hostname: string): string | null;
 
+    /**
+     * Get the decoded information of specific certificate.
+     *
+     * @param name The name of certificate.
+     */
     getCertificate(name: string): X509.ICertificate;
 
+    /**
+     * Get the TLS secure context of specific certificate.
+     *
+     * @param name The name of certificate.
+     */
+    getContext(name: string): TLS.SecureContext;
+
+    /**
+     * Get the callback of SNI.
+     */
     getSNICallback(): TSNICallback;
 }

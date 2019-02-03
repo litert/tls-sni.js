@@ -16,6 +16,11 @@
 
 import * as C from "./Common";
 
+/**
+ * Print the decoded DER data.
+ * @param data      The data to be printed.
+ * @param printer   The callback to print the text.
+ */
 export function print(
     data: C.IElement,
     printer: (text: any, depth: number) => void

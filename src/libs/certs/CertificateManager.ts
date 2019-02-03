@@ -55,30 +55,28 @@ class CertificateManager implements C.ICertificateManager {
         this._certs = {};
 
         this._sniCallback = (new Function(
-            `cc`, `cs`, `E`, `return function(hostname, cb) {
+            `cc`, `cs`, `E`, `return function(subject, cb) {
 
-                hostname = hostname.toLowerCase();
+                subject = subject.toLowerCase();
 
-                if (cc.simple[hostname] !== undefined) {
+                if (cc.simple[subject] !== undefined) {
 
-                    return cb(null, cs[cc.simple[hostname]].context);
+                    return cb(null, cs[cc.simple[subject]].context);
                 }
 
-                for (const cna in cc.wildcard) {
+                const wsEntry = subject.substr(subject.indexOf(".") + 1);
 
-                    if (hostname.endsWith(cna)) {
+                if (cc.wildcard[wsEntry] !== undefined) {
 
-                        cc.simple[hostname] = cc.wildcard[cna];
-                        return cb(null, cs[cc.wildcard[cna]].context);
-                    }
+                    return cb(null, cs[cc.wildcard[wsEntry]].context);
                 }
 
-                return cb(new E({ metadata: { hostname } }));
+                return cb(new E({ metadata: { subject } }));
             };`
         ))(this._cache, this._certs, E.E_UNKNOWN_SERVER_NAME) as any;
     }
 
-    public set(
+    public use(
         name: string,
         certificate: Buffer | string,
         privateKey: Buffer | string,
@@ -122,21 +120,27 @@ class CertificateManager implements C.ICertificateManager {
         return true;
     }
 
-    public test(hostname: string): string | null {
+    public test(subject: string): string | null {
 
-        hostname = hostname.toLowerCase();
+        subject = subject.toLowerCase();
 
-        if (this._cache.simple[hostname] !== undefined) {
+        if (this._cache.simple[subject] !== undefined) {
 
-            return this._cache.simple[hostname];
+            return this._cache.simple[subject];
         }
 
-        for (const cna in this._cache.wildcard) {
+        /**
+         * Extract the part after the first DOT symbol as the entry of a
+         * wildcard subject.
+         *
+         * If not DOT exists in the subject, it will be the whole subject.
+         * (-1 plus 1 makes 0)
+         */
+        const wsEntry = subject.substr(subject.indexOf(".") + 1);
 
-            if (hostname.endsWith(cna)) {
+        if (this._cache.wildcard[wsEntry] !== undefined) {
 
-                return this._cache.wildcard[cna];
-            }
+            return this._cache.wildcard[wsEntry];
         }
 
         return null;
@@ -150,6 +154,16 @@ class CertificateManager implements C.ICertificateManager {
         }
 
         return this._certs[name].cert;
+    }
+
+    public getContext(name: string): TLS.SecureContext {
+
+        if (!this._certs[name]) {
+
+            throw new E.E_NO_CERT({ metadata: { name } });
+        }
+
+        return this._certs[name].context;
     }
 
     private _buildCache(): void {
@@ -178,15 +192,42 @@ class CertificateManager implements C.ICertificateManager {
         }
     }
 
-    private _addCache(cn: string, certName: string): void {
+    private _addCache(subject: string, certName: string): void {
 
-        if (cn.startsWith("*")) {
+        subject = subject.toLowerCase();
 
-            this._cache.wildcard[cn.slice(1)] = certName;
+        /**
+         * A wildcard subject must start with an asterisk and a dot.
+         */
+        if (subject.startsWith("*.")) {
+
+            /**
+             * Use the part after the first DOT symbol as the entry of the
+             * subject.
+             */
+            subject = subject.slice(2);
+
+            /**
+             * Only one asterisk is allowed in a subject.
+             */
+            if (subject.includes("*")) {
+
+                throw new E.E_INVALID_WILDCARD({ metadata: { subject } });
+            }
+
+            this._cache.wildcard[subject] = certName;
         }
         else {
 
-            this._cache.simple[cn] = certName;
+            /**
+             * A wildcard subject must start with an asterisk and a dot.
+             */
+            if (subject.includes("*")) {
+
+                throw new E.E_INVALID_WILDCARD({ metadata: { subject } });
+            }
+
+            this._cache.simple[subject] = certName;
         }
     }
 
