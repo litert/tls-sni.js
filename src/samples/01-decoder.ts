@@ -20,7 +20,7 @@ import * as SNI from "../libs";
 import * as FS from "fs";
 
 const TEST_CERT = FS.readFileSync(
-    __dirname + "/../test/sample.crt"
+    __dirname + "/../test/certs/local.org/cert.pem"
 );
 
 const der = SNI.der.createDecoder();
