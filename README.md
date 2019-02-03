@@ -6,8 +6,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/litert/tls-sni.js.svg)](https://github.com/litert/tls-sni.js/issues)
 [![GitHub Releases](https://img.shields.io/github/release/litert/tls-sni.js.svg)](https://github.com/litert/tls-sni.js/releases "Stable Release")
 
-> Still under development.
-
 A TLS SNI(Server Name Indication) library for Node.js.
 
 ## Features
@@ -15,8 +13,8 @@ A TLS SNI(Server Name Indication) library for Node.js.
 - [x] TypeScript Supports.
 - [x] X.509 Certificate Decoder
 - [x] Partial DER Decoder
-- [ ] Certificate Manager
-- [ ] Graceful Update Certificate.
+- [x] Certificate Manager
+- [x] Graceful Update Certificate.
 
 ## Requirement
 

@@ -9,12 +9,14 @@
     "build-watch": "echo Using TypeScript && tsc -v && tsc -w -p .",
     "rebuild": "npm run clean && npm run lint && npm run build",
     "test": "echo See directory src/samples",
-    "clean": "rm -rf libs samples",
+    "clean": "rm -rf libs samples test",
     "lint": "tslint -p . -c tslint.json"
   },
   "keywords": [
     "litert",
-    "lrt"
+    "lrt",
+    "tls",
+    "sni"
   ],
   "author": "Angus.Fenying <fenying@litert.org> (https://fenying.net)",
   "license": "Apache-2.0",
