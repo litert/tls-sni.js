@@ -60,6 +60,8 @@ do
 
         echo "subjectAltName=@my_subject_alt_names" >> $CFG_FILE
         echo "[ my_subject_alt_names ]" >> $CFG_FILE
+        echo "DNS.$i = $DOMAIN_NAME" >> $CFG_FILE
+        i=2
         hasSAN=1
     fi;
 

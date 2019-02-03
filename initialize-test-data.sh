@@ -10,3 +10,7 @@ rm -rf test
 ./generate-cert.sh a.local.org
 ./generate-cert.sh b.local.org c.local.org
 ./generate-cert.sh x.local.org local.org '*.local.org'
+
+echo "Initialization completed."
+echo "Please add a.local.org, b.local.org, c.local.org, x.local.org, local.org,"
+echo "dddd.local.org, g.local.org to /etc/hosts or C:/Windows/System32/drivers/etc/hosts"

@@ -25,6 +25,28 @@
                 "${workspaceFolder}/samples/*.js",
                 "${workspaceFolder}/libs/*.js"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/TLS-SNI.js] Sample 03 - TLS With SNI",
+            "program": "${workspaceFolder}/src/samples/03-tls-with-sni.ts",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/libs/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/TLS-SNI.js] Sample 04 - HTTPS With SNI",
+            "program": "${workspaceFolder}/src/samples/04-https-with-sni.ts",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/libs/*.js"
+            ]
         }
     ]
 }

@@ -36,7 +36,8 @@ for (const hostname of [
     "c.local.org",
     "x.local.org",
     "local.org",
-    "g.local.org"
+    "g.local.org",
+    "dddd.local.org"
 ]) {
 
     const result = cm.test(hostname);
