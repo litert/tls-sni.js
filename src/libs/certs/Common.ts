@@ -29,6 +29,19 @@ export interface ICertificateManager {
     remove(name: string): boolean;
 
     /**
+     * Remove all existed certificates.
+     */
+    clear(): void;
+
+    /**
+     * Find the names of expiring certificates.
+     *
+     * @param expiringBefore Specify the timestamp, all certs expiring before
+     *                       this time will be returned. [Default: 7 days later]
+     */
+    findExpiringCertificates(expiringBefore?: number): string[];
+
+    /**
      * Setup a certificate. If the name of certificate already exists, the
      * current certificate will be overwritten.
      *

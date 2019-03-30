@@ -83,18 +83,11 @@ class CertificateManager implements C.ICertificateManager {
         extOptions: TLS.SecureContextOptions = {}
     ): this {
 
-        if (this._certs[name]) {
-
-            throw new E.E_DUP_CERT({
-                metadata: { name, certificate, privateKey }
-            });
-        }
-
         this._certs[name] = {
-            rawCert: certificate,
-            privateKey,
-            cert: this._x509.decode(certificate),
-            context: TLS.createSecureContext({
+            "rawCert": certificate,
+            "privateKey": privateKey,
+            "cert": this._x509.decode(certificate),
+            "context": TLS.createSecureContext({
                 ...extOptions,
                 key: privateKey,
                 cert: certificate
@@ -104,6 +97,33 @@ class CertificateManager implements C.ICertificateManager {
         this._buildCache();
 
         return this;
+    }
+
+    public clear(): void {
+
+        for (const name in this._certs) {
+
+            delete this._certs[name];
+        }
+
+        this._buildCache();
+    }
+
+    public findExpiringCertificates(
+        t: number = Date.now() + 7 * 86400000
+    ): string[] {
+
+        const ret: string[] = [];
+
+        for (const key in this._certs) {
+
+            if (this._certs[key].cert.details.validity.notAfter.getTime() <= t) {
+
+                ret.push(key);
+            }
+        }
+
+        return ret;
     }
 
     public remove(name: string): boolean {

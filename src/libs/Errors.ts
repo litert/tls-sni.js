@@ -18,12 +18,6 @@ import * as Core from "@litert/core";
 
 export const ErrorHub = Core.createErrorHub("@litert/tls-sni");
 
-export const E_DUP_CERT = ErrorHub.define(
-    null,
-    "E_DUP_CERT",
-    "The certificate of specific name already exists."
-);
-
 export const E_NO_CERT = ErrorHub.define(
     null,
     "E_NO_CERT",
