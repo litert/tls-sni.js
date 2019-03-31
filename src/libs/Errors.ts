@@ -53,3 +53,9 @@ export const E_INVALID_WILDCARD = ErrorHub.define(
     "E_INVALID_WILDCARD",
     "Invalid wildcard subject in certificate."
 );
+
+export const E_INVALID_RSA_KEY = ErrorHub.define(
+    null,
+    "E_INVALID_RSA_KEY",
+    "Invalid RSA key file."
+);

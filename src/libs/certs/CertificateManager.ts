@@ -18,6 +18,7 @@ import * as C from "./Common";
 import * as E from "../Errors";
 import * as X509 from "../x509";
 import * as TLS from "tls";
+import * as RSA from "../rsa";
 
 interface ICertificateInfo {
 
@@ -36,6 +37,8 @@ class CertificateManager implements C.ICertificateManager {
 
     private _x509: X509.IDecoder;
 
+    private _rsaPriv: RSA.IPrivateDecoder;
+
     private _cache!: Record<
         "simple" | "wildcard",
         Record<string, string>
@@ -51,6 +54,8 @@ class CertificateManager implements C.ICertificateManager {
         };
 
         this._x509 = X509.createDecoder();
+
+        this._rsaPriv = RSA.createPrivateKeyDecoder();
 
         this._certs = {};
 
@@ -124,6 +129,32 @@ class CertificateManager implements C.ICertificateManager {
         }
 
         return ret;
+    }
+
+    public validate(
+        cert: Buffer | string,
+        privKey: Buffer | string
+    ): boolean {
+
+        let c = this._x509.decode(cert);
+
+        if (!c.details.publicKey.algorithm.name.includes("RSA")) {
+
+            return false;
+        }
+
+        try {
+
+            let p = this._rsaPriv.decode(privKey);
+
+            return !(c.details.publicKey.value as any).modulus.compare(
+                p.modulus
+            );
+        }
+        catch {
+
+            return false;
+        }
     }
 
     public remove(name: string): boolean {

@@ -1,5 +1,11 @@
 # Changes Logs
 
+## v0.3.0
+
+- Added: method `validate` for class `CertificateManager`.
+- Added: RSA key decoders.
+- Now the x509 decoder could decode the content of RSA public key.
+
 ## v0.2.0
 
 - Added: method `findExpiringCertificates` for class `CertificateManager`.

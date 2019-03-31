@@ -23,10 +23,25 @@ const cm = libsni.certs.createManager();
 
 for (const name of ["a.local.org", "b.local.org", "x.local.org"]) {
 
+    const cert = FS.readFileSync(
+        `${__dirname}/../test/certs/${name}/fullchain.pem`
+    );
+
+    const pkey = FS.readFileSync(
+        `${__dirname}/../test/certs/${name}/key.pem`
+    );
+
+    if (!cm.validate(cert, pkey)) {
+
+        console.error(
+            `ERR[${name}]: Certificate doesn't fit the private key.`
+        );
+    }
+
     cm.use(
         name,
-        FS.readFileSync(`${__dirname}/../test/certs/${name}/fullchain.pem`),
-        FS.readFileSync(`${__dirname}/../test/certs/${name}/key.pem`)
+        cert,
+        pkey
     );
 }
 

@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-import * as der from "./der";
-import * as x509 from "./x509";
-import * as rsa from "./rsa";
-import * as certs from "./certs";
-
-export { der, x509, rsa, certs };
+export * from "./Common";
+export * from "./PrivateKeyDecoder";
+export * from "./PublicKeyDecoder";

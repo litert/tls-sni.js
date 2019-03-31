@@ -16,16 +16,28 @@
 
 import * as C from "./Common";
 import * as DER from "../der";
-import * as U from "./Utility";
-import * as O from "./OID";
+import * as RSA from "../rsa";
+import * as O from "../oid";
 import * as E from "../Errors";
+import * as A from "../Abstracts";
 
 const X509_START = "-----BEGIN CERTIFICATE-----";
 const X509_ENDING = "-----END CERTIFICATE-----";
 
-class X509Decoder implements C.IDecoder {
+class X509Decoder
+extends A.AbstractPEMDecoder
+implements C.IDecoder {
 
     private _der = DER.createDecoder();
+
+    public constructor() {
+
+        super(
+            X509_START,
+            X509_ENDING,
+            E.E_INVALID_X509
+        );
+    }
 
     public decode(cert: Buffer | string): C.ICertificate {
 
@@ -182,13 +194,31 @@ class X509Decoder implements C.IDecoder {
                         extInfo.value = x.data[extInfo.critical ? 2 : 1].data;
                     }
 
-                    ret.details.extensions[U.oid2Name(x.data[0].data)] = extInfo;
+                    ret.details.extensions[O.oid2Name(x.data[0].data)] = extInfo;
                 }
                 break;
             }
         }
 
-        ret.details.publicKey.value = tbsc[6].data[1].data;
+        /**
+         * If a RSA key is used.
+         */
+        if (ret.details.publicKey.algorithm.name.includes("RSA")) {
+
+            const pubKey = this._der.decode(
+                tbsc[6].data[1].data.value
+            ) as RSA.TRSAPubKey;
+
+            ret.details.publicKey.value = {
+
+                "modulus": pubKey.data[0].data as Buffer,
+                "publicExponent": pubKey.data[1].data
+            };
+        }
+        else {
+
+            ret.details.publicKey.value = tbsc[6].data[1].data;
+        }
 
         return ret;
     }
@@ -200,65 +230,14 @@ class X509Decoder implements C.IDecoder {
 
         for (let x of data.data) {
 
-            output[U.oid2Name(x.data[0].data[0].data)] = x.data[0].data[1].data;
+            output[O.oid2Name(x.data[0].data[0].data)] = x.data[0].data[1].data;
         }
     }
 
     private _readAlgorithm(dc: DER.IElement, output: C.IAlgorithm): void {
 
-        output.name = U.oid2Name(dc.data[0].data);
+        output.name = O.oid2Name(dc.data[0].data);
         output.args = dc.data[1].data;
-    }
-
-    public isPEM(cert: Buffer | string): boolean {
-
-        return cert.indexOf(X509_START) === 0 &&
-                cert.indexOf(X509_ENDING) > X509_START.length;
-    }
-
-    public isDER(cert: Buffer): boolean {
-
-        return cert[0] === 0x30;
-    }
-
-    public pem2DER(cert: Buffer | string): Buffer {
-
-        if (cert instanceof Buffer) {
-
-            cert = cert.toString();
-        }
-
-        cert = cert
-        .replace(/\r\n/, "\n")
-        .replace(/\r/, "\n")
-        .replace(/^\n|\n$/, "")
-        .replace(/\n+/, "\n");
-
-        const ep = cert.indexOf(X509_ENDING);
-
-        if (!cert.startsWith(X509_START) || ep === -1) {
-
-            throw new E.E_INVALID_X509();
-        }
-
-        return Buffer.from(
-            cert.substr(
-                X509_START.length,
-                ep - X509_START.length
-            ).replace(/\n/g, ""),
-            "base64"
-        );
-    }
-
-    public der2PEM(cert: Buffer): string {
-
-        return `${
-            X509_START
-        }\n${
-            cert.toString("base64").replace(/(.{1, 64})/g, "$1\n")
-        }\n${
-            X509_ENDING
-        }`;
     }
 }
 

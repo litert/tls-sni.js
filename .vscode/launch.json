@@ -47,6 +47,28 @@
                 "${workspaceFolder}/samples/*.js",
                 "${workspaceFolder}/libs/*.js"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/TLS-SNI.js] Sample 05 - RSA Private Key",
+            "program": "${workspaceFolder}/src/samples/05-rsa-private-key.ts",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/libs/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/TLS-SNI.js] Sample 06 - RSA Public Key",
+            "program": "${workspaceFolder}/src/samples/06-rsa-public-key.ts",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/libs/*.js"
+            ]
         }
     ]
 }

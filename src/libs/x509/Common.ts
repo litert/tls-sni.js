@@ -75,7 +75,12 @@ export interface ICertificate {
 
             algorithm: IAlgorithm;
 
-            value: IBitStringContent;
+            value: IBitStringContent | {
+
+                modulus: Buffer;
+
+                publicExponent: number | Buffer;
+            };
         };
 
         issuerUniqueID?: IBitStringContent;

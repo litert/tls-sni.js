@@ -58,6 +58,17 @@ export interface ICertificateManager {
     ): this;
 
     /**
+     * Validate if a private key pairs with a certificate.
+     *
+     * @param cert          The content of certificate.
+     * @param privateKey    The content of private key against the certificate.
+     */
+    validate(
+        cert: Buffer | string,
+        privateKey: Buffer | string
+    ): boolean;
+
+    /**
      * Check and find the name of certificate that the specific hostname will
      * use.
      *

@@ -2,12 +2,20 @@
 
 DOMAIN_NAME=$1
 
+KEY_WIDTH=$TLS_SNI_KEY_WIDTH;
+
+if [ -z "$KEY_WIDTH" ]; then
+
+    KEY_WIDTH=2048 # default 2048 bits
+fi
+
 CA_ROOT=test/ca
 CERTS_ROOT=test/certs
 CA_CONF_FILE=$CA_ROOT/ca.conf
 CA_CERT=$CA_ROOT/cert.pem
 CERT_DIR=$CERTS_ROOT/$DOMAIN_NAME
 PRIV_KEY_FILE=$CERT_DIR/key.pem
+PUB_KEY_FILE=$CERT_DIR/pub.pem
 CERT_FILE=$CERT_DIR/cert.pem
 FULLCHAIN_FILE=$CERT_DIR/fullchain.pem
 CSR_FILE=$CERT_DIR/csr.pem
@@ -19,10 +27,11 @@ mkdir -p $CERT_DIR
 
 rm -f $CERT_DIR/*
 
-openssl genrsa -out $PRIV_KEY_FILE 2048
+openssl genrsa -out $PRIV_KEY_FILE $KEY_WIDTH
+openssl rsa -in $PRIV_KEY_FILE -pubout -out $PUB_KEY_FILE
 
 echo "[ req ]" > $CFG_FILE
-echo "default_bits = 2048" >> $CFG_FILE
+echo "default_bits = $KEY_WIDTH" >> $CFG_FILE
 echo "default_md = sha256" >> $CFG_FILE
 echo "prompt = no" >> $CFG_FILE
 echo "utf8 = yes" >> $CFG_FILE

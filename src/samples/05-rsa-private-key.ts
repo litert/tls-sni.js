@@ -14,9 +14,21 @@
  * limitations under the License.
  */
 
-import * as der from "./der";
-import * as x509 from "./x509";
-import * as rsa from "./rsa";
-import * as certs from "./certs";
+// tslint:disable:no-console
 
-export { der, x509, rsa, certs };
+import * as libsni from "../libs";
+import * as fs from "fs";
+
+const dpriv = libsni.rsa.createPrivateKeyDecoder();
+
+const priv = dpriv.decode(fs.readFileSync(
+    `${__dirname}/../test/certs/b.local.org/key.pem`
+));
+
+console.log(JSON.stringify(priv, function(k, v): any {
+    if (typeof v === "object" && v !== null && "data" in v && v.type === "Buffer") {
+
+        return Buffer.from(v.data).toString("base64");
+    }
+    return v;
+}, 2));
