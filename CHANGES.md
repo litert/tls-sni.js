@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v0.3.1
+
+- Fixed the dependencies.
+
 ## v0.3.0
 
 - Added: method `validate` for class `CertificateManager`.

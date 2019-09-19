@@ -21,41 +21,48 @@ export const ErrorHub = Core.createErrorHub("@litert/tls-sni");
 export const E_NO_CERT = ErrorHub.define(
     null,
     "E_NO_CERT",
-    "The certificate of specific name doesn't exists."
+    "The certificate of specific name doesn't exists.",
+    {}
 );
 
 export const E_UNKNOWN_SERVER_NAME = ErrorHub.define(
     null,
     "E_UNKNOWN_SERVER_NAME",
-    "The server name is not allowed."
+    "The server name is not allowed.",
+    {}
 );
 
 export const E_UNEXPECTED_ENDING = ErrorHub.define(
     null,
     "E_UNEXPECTED_ENDING",
-    "Unexpected ending of content was found."
+    "Unexpected ending of content was found.",
+    {}
 );
 
 export const E_INVALID_X509 = ErrorHub.define(
     null,
     "E_INVALID_X509",
-    "Invalid X.509 certificate."
+    "Invalid X.509 certificate.",
+    {}
 );
 
 export const E_UNSUPPORTED_BER_FEATURE = ErrorHub.define(
     null,
     "E_NOT_SUPPORTED_BER_FEATURE",
-    "Unsupported BER feature was found."
+    "Unsupported BER feature was found.",
+    {}
 );
 
 export const E_INVALID_WILDCARD = ErrorHub.define(
     null,
     "E_INVALID_WILDCARD",
-    "Invalid wildcard subject in certificate."
+    "Invalid wildcard subject in certificate.",
+    {}
 );
 
 export const E_INVALID_RSA_KEY = ErrorHub.define(
     null,
     "E_INVALID_RSA_KEY",
-    "Invalid RSA key file."
+    "Invalid RSA key file.",
+    {}
 );

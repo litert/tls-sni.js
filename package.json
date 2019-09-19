@@ -1,6 +1,6 @@
 {
   "name": "@litert/tls-sni",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A TLS SNI(Server Name Indication) library for Node.js.",
   "main": "./libs/index.js",
   "scripts": {
@@ -38,6 +38,6 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@litert/core": "^1.0.3"
+    "@litert/core": "^1.0.6"
   }
 }

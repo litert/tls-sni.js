@@ -15,6 +15,7 @@ A TLS SNI(Server Name Indication) library for Node.js.
 - [x] Partial DER Decoder
 - [x] Certificate Manager
 - [x] Graceful Update Certificate.
+- [ ] ECC Certificate Supports.
 
 ## Requirement
 
@@ -25,6 +26,47 @@ A TLS SNI(Server Name Indication) library for Node.js.
 
 ```sh
 npm i @litert/tls-sni --save
+```
+
+## Usage
+
+```ts
+import * as libsni from "@litert/tls-sni";
+import * as TLS from "tls";
+import * as FS from "fs";
+
+// 1. Create a certificate mananger object.
+const cm = libsni.certs.createManager();
+
+// 2. Load a certificate into certificate mananger
+cm.use(
+    "default",
+    FS.readFileSync(`./certs/default/cert-20190801.pem`),
+    FS.readFileSync(`./certs/default/key-20190801.pem`)
+);
+
+// 3. Create a TLS server with the SNI callback provided by ceritificate manager.
+const server = TLS.createServer({
+    SNICallback: cm.getSNICallback(),
+    ...otherOptions
+});
+
+// ...
+
+// 4. Check if there are some certificates outdating.
+
+const outdatingCerts = cm.findExpiringCertificates(
+    Date.now() + 28 * 86400000 // Optional, 7 days by default
+); // Get the list of certificate names, which are outdating in 28 days.
+
+// ...
+
+// 5. When a cert is being outdated, replace it with a new one.
+cm.use(
+    "default",
+    FS.readFileSync(`./certs/default/cert-20190901.pem`),
+    FS.readFileSync(`./certs/default/key-20190901.pem`)
+);
 ```
 
 ## Document
