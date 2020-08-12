@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-import * as C from "./Common";
+import * as C from './Common';
 
-/**
- * Print the decoded DER data.
- * @param data      The data to be printed.
- * @param printer   The callback to print the text.
- */
-export function print(
-    data: C.IElement,
-    printer: (text: any, depth: number) => void
-): void {
-
-    _print(data, printer, 0);
-}
-
-function _print(
+function printDERStruct(
     e: C.IElement,
     printer: (text: any, depth: number) => void,
     depth: number
@@ -41,7 +28,7 @@ function _print(
 
         if (e.tag.constructed) {
 
-            _print(e.data, printer, depth + 1);
+            printDERStruct(e.data, printer, depth + 1);
         }
         else {
 
@@ -57,22 +44,35 @@ function _print(
 
         for (let x of e.data) {
 
-            _print(x, printer, depth + 1);
+            printDERStruct(x, printer, depth + 1);
         }
     }
     else if (e.data instanceof Buffer) {
 
-        printer(e.data.toString("hex"), depth + 1);
+        printer(e.data.toString('hex'), depth + 1);
     }
     else {
 
-        if (typeof e.data === "object" && e.data !== null && "tag" in e.data) {
+        if (typeof e.data === 'object' && e.data !== null && 'tag' in e.data) {
 
-            _print(e.data, printer, depth + 2);
+            printDERStruct(e.data, printer, depth + 2);
         }
         else {
 
             printer(JSON.stringify(e.data), depth + 1);
         }
     }
+}
+
+/**
+ * Print the decoded DER data.
+ * @param data      The data to be printed.
+ * @param printer   The callback to print the text.
+ */
+export function print(
+    data: C.IElement,
+    printer: (text: any, depth: number) => void
+): void {
+
+    printDERStruct(data, printer, 0);
 }

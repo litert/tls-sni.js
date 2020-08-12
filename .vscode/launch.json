@@ -7,66 +7,66 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/TLS-SNI.js] Sample 01 - X.509 Decoder",
-            "program": "${workspaceFolder}/src/samples/01-decoder.ts",
+            "name": "[LiteRT/TLS-SNI.js] Example 01 - X.509 Decoder",
+            "program": "${workspaceFolder}/src/examples/01-decoder.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/examples/*.js",
                 "${workspaceFolder}/libs/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/TLS-SNI.js] Sample 02 - Certificates Manager",
-            "program": "${workspaceFolder}/src/samples/02-certificates.ts",
+            "name": "[LiteRT/TLS-SNI.js] Example 02 - Certificates Manager",
+            "program": "${workspaceFolder}/src/examples/02-certificates.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/examples/*.js",
                 "${workspaceFolder}/libs/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/TLS-SNI.js] Sample 03 - TLS With SNI",
-            "program": "${workspaceFolder}/src/samples/03-tls-with-sni.ts",
+            "name": "[LiteRT/TLS-SNI.js] Example 03 - TLS With SNI",
+            "program": "${workspaceFolder}/src/examples/03-tls-with-sni.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/examples/*.js",
                 "${workspaceFolder}/libs/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/TLS-SNI.js] Sample 04 - HTTPS With SNI",
-            "program": "${workspaceFolder}/src/samples/04-https-with-sni.ts",
+            "name": "[LiteRT/TLS-SNI.js] Example 04 - HTTPS With SNI",
+            "program": "${workspaceFolder}/src/examples/04-https-with-sni.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/examples/*.js",
                 "${workspaceFolder}/libs/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/TLS-SNI.js] Sample 05 - RSA Private Key",
-            "program": "${workspaceFolder}/src/samples/05-rsa-private-key.ts",
+            "name": "[LiteRT/TLS-SNI.js] Example 05 - RSA Private Key",
+            "program": "${workspaceFolder}/src/examples/05-rsa-private-key.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/examples/*.js",
                 "${workspaceFolder}/libs/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/TLS-SNI.js] Sample 06 - RSA Public Key",
-            "program": "${workspaceFolder}/src/samples/06-rsa-public-key.ts",
+            "name": "[LiteRT/TLS-SNI.js] Example 06 - RSA Public Key",
+            "program": "${workspaceFolder}/src/examples/06-rsa-public-key.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/samples/*.js",
+                "${workspaceFolder}/examples/*.js",
                 "${workspaceFolder}/libs/*.js"
             ]
         }

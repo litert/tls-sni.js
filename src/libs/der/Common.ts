@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,26 +60,26 @@ export enum ETClass {
 }
 
 export interface ITag<
-    C extends ETClass = ETClass,
-    E extends ETKind = ETKind
+    TC extends ETClass = ETClass,
+    TE extends ETKind = ETKind
 > {
 
-    class: C;
+    class: TC;
 
     constructed: boolean;
 
-    type: E;
+    type: TE;
 }
 
 export interface IElement<
-    C extends ETClass = ETClass,
-    E extends ETKind = ETKind,
-    D = any
+    TC extends ETClass = ETClass,
+    TE extends ETKind = ETKind,
+    TD = any
 > {
 
-    tag: ITag<C, E>;
+    tag: ITag<TC, TE>;
 
-    data: D;
+    data: TD;
 }
 
 export interface IDecoder {

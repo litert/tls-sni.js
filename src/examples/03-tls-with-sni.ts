@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@
 
 // tslint:disable:no-console
 
-import * as libsni from "../libs";
-import * as TLS from "tls";
-import * as FS from "fs";
+import * as libsni from '../libs';
+import * as TLS from 'tls';
+import * as FS from 'fs';
 
 const CA_CERT = FS.readFileSync(`${__dirname}/../test/ca/cert.pem`);
 
 const cm = libsni.certs.createManager();
 
 for (const name of [
-    "a.local.org",
-    "b.local.org",
-    "x.local.org"
+    'a.local.org',
+    'b.local.org',
+    'x.local.org'
 ]) {
 
     cm.use(
@@ -41,48 +41,49 @@ for (const name of [
 }
 
 const server = TLS.createServer({
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     SNICallback: cm.getSNICallback(),
     requestCert: false
 }, function(socket): void {
 
-    console.info("Server: New connection.");
+    console.info('Server: New connection.');
 
-    socket.write("Hello", () => console.info("Server: Response sent."));
+    socket.write('Hello', () => console.info('Server: Response sent.'));
     setTimeout(() => socket.end(), 5000);
 });
 
-server.listen(443, "127.0.0.1", function(): void {
+server.listen(10443, '127.0.0.1', function(): void {
 
-    console.info("Server: started");
+    console.info('Server: started');
 
     for (const hostname of [
-        "a.local.org",
-        "b.local.org",
-        "c.local.org",
-        "local.org",
-        "dddd.local.org",
-        "g.local.org",
-        "x.local.org",
-        "www.c.local.org"
+        'a.local.org',
+        'b.local.org',
+        'c.local.org',
+        'local.org',
+        'dddd.local.org',
+        'g.local.org',
+        'x.local.org',
+        'www.c.local.org'
     ]) {
 
         TLS.connect({
-            host: hostname,
-            port: 443,
+            host: '127.0.0.1',
+            port: 10443,
             servername: hostname,
             ca: [ CA_CERT ]
         }, () => console.info(`Client[${hostname}]: Connected.`)).on(
-            "data",
+            'data',
             function(this: TLS.TLSSocket, chunk: Buffer): void {
 
                 console.info(`Client[${hostname}]: Received data "${chunk.toString()}".`);
                 this.end();
             }
-        ).on("error", (e) => console.error(`Client[${hostname}]: ${e.stack}`));
+        ).on('error', (e) => console.error(`Client[${hostname}]: ${e.stack}`));
     }
 
-    setTimeout(() => server.close(() => console.info(`Server: closed`)), 5000);
+    setTimeout(() => server.close(() => console.info('Server: closed')), 5000);
 }).on(
-    "error",
+    'error',
     (e) => console.error(`Server: ${e.toString()}`)
 );

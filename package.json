@@ -1,16 +1,17 @@
 {
   "name": "@litert/tls-sni",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A TLS SNI(Server Name Indication) library for Node.js.",
   "main": "./libs/index.js",
   "scripts": {
-    "prepare": "npm run rebuild",
+    "prepublishOnly": "npm run rebuild",
     "build": "echo Using TypeScript && tsc -v && tsc -p .",
     "build-watch": "echo Using TypeScript && tsc -v && tsc -w -p .",
     "rebuild": "npm run clean && npm run lint && npm run build",
-    "test": "echo See directory src/samples",
-    "clean": "rm -rf libs samples test",
-    "lint": "tslint -p . -c tslint.json"
+    "test": "echo See directory src/examples",
+    "clean": "rm -rf libs examples test",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint --ext ts src"
   },
   "keywords": [
     "litert",
@@ -31,11 +32,23 @@
   "types": "./libs/index.d.ts",
   "typings": "./libs/index.d.ts",
   "devDependencies": {
-    "@types/node": "^10.12.2",
-    "typescript": "^3.1.4"
+    "@commitlint/cli": "^9.1.1",
+    "@commitlint/config-conventional": "^9.1.1",
+    "@types/node": "^10.17.28",
+    "@typescript-eslint/eslint-plugin": "^3.9.0",
+    "@typescript-eslint/parser": "^3.9.0",
+    "eslint": "^7.6.0",
+    "husky": "^4.2.5",
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">=10.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "npm run lint && npm run typecheck"
+    }
   },
   "dependencies": {
     "@litert/core": "^1.0.6"

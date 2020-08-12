@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import * as TLS from "tls";
-import * as X509 from "../x509";
+import * as TLS from 'tls';
+import * as X509 from '../x509';
 
-export type TSNICallback = TLS.TlsOptions["SNICallback"];
+export type TSNICallback = TLS.TlsOptions['SNICallback'];
 
 export interface ICertificateManager {
 

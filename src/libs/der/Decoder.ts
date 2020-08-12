@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 // tslint:disable:no-bitwise
-import * as C from "./Common";
-import * as E from "../Errors";
+import * as C from './Common';
+import * as E from '../Errors';
 
 class Decoder implements C.IDecoder {
 
@@ -33,42 +33,42 @@ class Decoder implements C.IDecoder {
 
         switch (tag.class) {
 
-        case C.ETClass.UNIVERSAL:
+            case C.ETClass.UNIVERSAL:
 
-            switch (tag.type) {
-            case C.ETKind.NULL:
-                return this._decodeNull(tag, data, offset);
-            case C.ETKind.BOOLEAN:
-                return this._decodeBoolean(tag, data, offset);
-            case C.ETKind.BIT_STRING:
-                return this._decodeBitString(tag, data, offset);
-            case C.ETKind.OCTET_STRING:
-                return this._decodeRawData(tag, data, offset);
-            case C.ETKind.PRINTABLE_STRING:
-                return this._decodePrintableString(tag, data, offset);
-            case C.ETKind.UTF8_STRING:
-                return this._decodePrintableString(tag, data, offset);
-            case C.ETKind.INTEGER:
-                return this._decodeInteger(tag, data, offset);
-            case C.ETKind.SET:
-            case C.ETKind.SEQUENCE:
-                return this._decodeSequence(tag, data, offset);
-            case C.ETKind.OID:
-                return this._decodeOID(tag, data, offset);
-            case C.ETKind.UTC_TIME:
-                return this._decodeUTCTime(tag, data, offset);
+                switch (tag.type) {
+                    case C.ETKind.NULL:
+                        return this._decodeNull(tag, data, offset);
+                    case C.ETKind.BOOLEAN:
+                        return this._decodeBoolean(tag, data, offset);
+                    case C.ETKind.BIT_STRING:
+                        return this._decodeBitString(tag, data, offset);
+                    case C.ETKind.OCTET_STRING:
+                        return this._decodeRawData(tag, data, offset);
+                    case C.ETKind.PRINTABLE_STRING:
+                        return this._decodePrintableString(tag, data, offset);
+                    case C.ETKind.UTF8_STRING:
+                        return this._decodePrintableString(tag, data, offset);
+                    case C.ETKind.INTEGER:
+                        return this._decodeInteger(tag, data, offset);
+                    case C.ETKind.SET:
+                    case C.ETKind.SEQUENCE:
+                        return this._decodeSequence(tag, data, offset);
+                    case C.ETKind.OID:
+                        return this._decodeOID(tag, data, offset);
+                    case C.ETKind.UTC_TIME:
+                        return this._decodeUTCTime(tag, data, offset);
+                    default:
+                        return this._decodeRawData(tag, data, offset);
+                }
+
             default:
+
+                if (tag.constructed) {
+
+                    return this._decodeNest(tag, data, offset);
+                }
+
                 return this._decodeRawData(tag, data, offset);
-            }
-
-        default:
-
-            if (tag.constructed) {
-
-                return this._decodeNest(tag, data, offset);
-            }
-
-            return this._decodeRawData(tag, data, offset);
         }
     }
 
@@ -165,26 +165,26 @@ class Decoder implements C.IDecoder {
 
         [offset, length] = this._readLength(data, offset);
 
-        const yy = parseInt(data.toString("utf8", offset, offset + 2));
+        const yy = parseInt(data.toString('utf8', offset, offset + 2));
         const y = yy >= 40 ? (1900 + yy) : (2000 + yy);
-        const m = data.toString("utf8", offset + 2, offset + 4);
-        const d = data.toString("utf8", offset + 4, offset + 6);
-        const h = data.toString("utf8", offset + 6, offset + 8);
-        const M = data.toString("utf8", offset + 8, offset + 10);
+        const m = data.toString('utf8', offset + 2, offset + 4);
+        const d = data.toString('utf8', offset + 4, offset + 6);
+        const h = data.toString('utf8', offset + 6, offset + 8);
+        const M = data.toString('utf8', offset + 8, offset + 10);
 
         let tz!: string;
-        let s: string = "00";
+        let s: string = '00';
 
         switch (length) {
-        case 11:
-        case 15:
-            tz = data.toString("utf8", offset + 10, offset + length);
-            break;
-        case 13:
-        case 17:
-            tz = data.toString("utf8", offset + 12, offset + length);
-            s = data.toString("utf8", offset + 10, offset + 12);
-            break;
+            case 11:
+            case 15:
+                tz = data.toString('utf8', offset + 10, offset + length);
+                break;
+            case 13:
+            case 17:
+                tz = data.toString('utf8', offset + 12, offset + length);
+                s = data.toString('utf8', offset + 10, offset + 12);
+                break;
         }
 
         return [offset + length, {
@@ -238,7 +238,7 @@ class Decoder implements C.IDecoder {
 
         return [offset + length, {
             tag,
-            data: data.toString("utf8", offset, offset + length)
+            data: data.toString('utf8', offset, offset + length)
         }];
     }
 
@@ -272,11 +272,11 @@ class Decoder implements C.IDecoder {
 
         return [offset + length, {
             tag,
-            data: values.join(".")
+            data: values.join('.')
         }];
     }
 
-    public _readTag(data: Buffer, offset: number): [number, C.ITag] {
+    private _readTag(data: Buffer, offset: number): [number, C.ITag] {
 
         let type = data[offset] & 31;
 
@@ -320,12 +320,12 @@ class Decoder implements C.IDecoder {
         }
     }
 
-    public _readLength(data: Buffer, offset: number): [number, number] {
+    private _readLength(data: Buffer, offset: number): [number, number] {
 
         if (data[offset] === 0x80) {
 
             throw new E.E_UNSUPPORTED_BER_FEATURE({
-                message: `Unlimited length definition is not supported yet.`
+                message: 'Unlimited length definition is not supported yet.'
             });
         }
 

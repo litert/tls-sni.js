@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import * as C from "./Common";
-import * as DER from "../der";
-import * as O from "../oid";
-import * as E from "../Errors";
-import * as A from "../Abstracts";
+import * as C from './Common';
+import * as DER from '../der';
+import * as O from '../oid';
+import * as E from '../Errors';
+import * as A from '../Abstracts';
 
-const PUB_START = "-----BEGIN PUBLIC KEY-----";
-const PUB_ENDING = "-----END PUBLIC KEY-----";
+const PUB_START = '-----BEGIN PUBLIC KEY-----';
+const PUB_ENDING = '-----END PUBLIC KEY-----';
 
 class RSAPublicKeyDecoder
-extends A.AbstractPEMDecoder
-implements C.IPublicDecoder {
+    extends A.AbstractPEMDecoder
+    implements C.IPublicDecoder {
 
     private _der = DER.createDecoder();
 
@@ -40,7 +40,7 @@ implements C.IPublicDecoder {
 
     public decode(cert: Buffer | string): C.IPublicKey {
 
-        if (typeof cert === "string" || this.isPEM(cert)) {
+        if (typeof cert === 'string' || this.isPEM(cert)) {
 
             cert = this.pem2DER(cert);
         }
@@ -53,7 +53,7 @@ implements C.IPublicDecoder {
 
         const algo = O.oid2Name(derStruct.data[0].data[0].data);
 
-        if (!algo.includes("RSA")) {
+        if (!algo.includes('RSA')) {
 
             throw new E.E_INVALID_RSA_KEY();
         }
@@ -63,8 +63,8 @@ implements C.IPublicDecoder {
         ) as C.TRSAPubKey;
 
         return {
-            "modulus": pubKey.data[0].data as Buffer,
-            "publicExponent": pubKey.data[1].data
+            'modulus': pubKey.data[0].data as Buffer,
+            'publicExponent': pubKey.data[1].data
         };
     }
 }

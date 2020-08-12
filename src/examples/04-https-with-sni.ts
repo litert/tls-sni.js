@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@
 
 // tslint:disable:no-console
 
-import * as libsni from "../libs";
-import * as HTTPS from "https";
-import * as FS from "fs";
+import * as libsni from '../libs';
+import * as HTTPS from 'https';
+import * as FS from 'fs';
 
 const CA_CERT = FS.readFileSync(`${__dirname}/../test/ca/cert.pem`);
 
 const cm = libsni.certs.createManager();
 
 for (const name of [
-    "a.local.org",
-    "b.local.org",
-    "x.local.org"
+    'a.local.org',
+    'b.local.org',
+    'x.local.org'
 ]) {
 
     cm.use(
@@ -41,51 +41,53 @@ for (const name of [
 }
 
 const server = HTTPS.createServer({
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     SNICallback: cm.getSNICallback(),
     requestCert: false
 }, function(req, resp): void {
 
-    console.info(`Server: New connection for ${req.headers["host"]}.`);
+    console.info(`Server: New connection for ${req.headers['host']}.`);
 
-    resp.setHeader("Content-Length", 5);
-    resp.end("Hello", () => console.info("Server: Response sent."));
+    resp.setHeader('Content-Length', 5);
+    resp.end('Hello', () => console.info('Server: Response sent.'));
 });
 
-server.listen(443, "127.0.0.1", function(): void {
+server.listen(10443, '127.0.0.1', function(): void {
 
-    console.info("Server: started");
+    console.info('Server: started');
 
     for (const hostname of [
-        "a.local.org",
-        "b.local.org",
-        "c.local.org",
-        "local.org",
-        "dddd.local.org",
-        "g.local.org",
-        "x.local.org",
-        "www.c.local.org"
+        'a.local.org',
+        'b.local.org',
+        'c.local.org',
+        'local.org',
+        'dddd.local.org',
+        'g.local.org',
+        'x.local.org',
+        'www.c.local.org'
     ]) {
 
         HTTPS.request({
-            host: hostname,
-            port: 443,
-            path: "/",
-            method: "GET",
+            host: '127.0.0.1',
+            servername: hostname,
+            port: 10443,
+            path: '/',
+            method: 'GET',
             ca: [ CA_CERT ]
         }, (resp) => {
             console.info(`Client[${hostname}]: Connected.`);
             resp.on(
-                "data",
+                'data',
                 function(chunk: Buffer): void {
 
                     console.info(`Client[${hostname}]: Received data "${chunk.toString()}".`);
                 }
             );
-        }).on("error", (e) => console.error(`Client[${hostname}]: ${e.stack}`)).end();
+        }).on('error', (e) => console.error(`Client[${hostname}]: ${e.stack}`)).end();
     }
 
-    setTimeout(() => server.close(() => console.info(`Server: closed`)), 5000);
+    setTimeout(() => server.close(() => console.info('Server: closed')), 5000);
 }).on(
-    "error",
+    'error',
     (e) => console.error(`Server: ${e.toString()}`)
 );

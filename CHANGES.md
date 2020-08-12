@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v0.3.2
+
+- Fixed the X509 extension decoding.
+
 ## v0.3.1
 
 - Fixed the dependencies.

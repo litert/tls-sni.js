@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import * as C from "./Common";
-import * as DER from "../der";
-import * as E from "../Errors";
-import * as A from "../Abstracts";
+import * as C from './Common';
+import * as DER from '../der';
+import * as E from '../Errors';
+import * as A from '../Abstracts';
 
-const PRIV_START = "-----BEGIN RSA PRIVATE KEY-----";
-const PRIV_ENDING = "-----END RSA PRIVATE KEY-----";
+const PRIV_START = '-----BEGIN RSA PRIVATE KEY-----';
+const PRIV_ENDING = '-----END RSA PRIVATE KEY-----';
 
 class RSAPrivateKeyDecoder
-extends A.AbstractPEMDecoder
-implements C.IPrivateDecoder {
+    extends A.AbstractPEMDecoder
+    implements C.IPrivateDecoder {
 
     private _der = DER.createDecoder();
 
@@ -39,7 +39,7 @@ implements C.IPrivateDecoder {
 
     public decode(cert: Buffer | string): C.IPrivateKey {
 
-        if (typeof cert === "string" || this.isPEM(cert)) {
+        if (typeof cert === 'string' || this.isPEM(cert)) {
 
             cert = this.pem2DER(cert);
         }
@@ -51,7 +51,7 @@ implements C.IPrivateDecoder {
         const derStruct: C.TPrivateKeySkeleton = this._der.decode(cert) as any;
 
         return {
-            version: derStruct.data[0].data === 0 ? "prime" : "multi",
+            version: derStruct.data[0].data === 0 ? 'prime' : 'multi',
             modulus: derStruct.data[1].data as Buffer,
             publicExponent: derStruct.data[2].data,
             privateExponent: derStruct.data[3].data as Buffer,

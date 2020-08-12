@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import {
     ETKind,
     TBitString
 
-} from "../der/Common";
+} from '../der/Common';
 
 export type TPrivateKeySkeleton = TSequence<[
     TInteger,
@@ -50,44 +50,44 @@ export interface IPrivateKey {
     /**
      * Type of key.
      */
-    "version": "prime" | "multi";
+    'version': 'prime' | 'multi';
 
     /**
      * Public moduls n
      */
-    "modulus": Buffer;
+    'modulus': Buffer;
 
     /**
      * Public exponent e
      */
-    "publicExponent": number | Buffer;
+    'publicExponent': number | Buffer;
 
     /**
      * Private exponent d
      */
-    "privateExponent": Buffer;
+    'privateExponent': Buffer;
 
     /**
      * Secret prime p
      */
-    "prime1": Buffer;
+    'prime1': Buffer;
 
     /**
      * Secret prime q
      */
-    "prime2": Buffer;
+    'prime2': Buffer;
 
     /**
      * dp = d mod (p - 1)
      */
-    "exponent1": Buffer;
+    'exponent1': Buffer;
 
     /**
      * dq = d mode (q - 1)
      */
-    "exponent2": Buffer;
+    'exponent2': Buffer;
 
-    "coefficient": Buffer;
+    'coefficient': Buffer;
 }
 
 export interface IPublicKey {
@@ -95,12 +95,12 @@ export interface IPublicKey {
     /**
      * Public moduls n
      */
-    "modulus": Buffer;
+    'modulus': Buffer;
 
     /**
      * Public exponent e
      */
-    "publicExponent": number | Buffer;
+    'publicExponent': number | Buffer;
 }
 
 export interface IPrivateDecoder {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import * as L from "@litert/core";
+import * as L from '@litert/core';
 
 export class AbstractPEMDecoder {
 
     public constructor(
-        private _PEM_START: string,
-        private _PEM_ENDING: string,
-        private _ERROR: L.IErrorConstructor<any>
+        private _pemStarting: string,
+        private _pemEnding: string,
+        private _error: L.IErrorConstructor<any>
     ) {}
 
     public isPEM(cert: Buffer | string): boolean {
 
-        return cert.indexOf(this._PEM_START) === 0 &&
-                cert.indexOf(this._PEM_ENDING) > this._PEM_START.length;
+        return cert.indexOf(this._pemStarting) === 0 &&
+                cert.indexOf(this._pemEnding) > this._pemStarting.length;
     }
 
     public isDER(cert: Buffer): boolean {
@@ -43,35 +43,35 @@ export class AbstractPEMDecoder {
         }
 
         cert = cert
-        .replace(/\r\n/, "\n")
-        .replace(/\r/, "\n")
-        .replace(/^\n|\n$/, "")
-        .replace(/\n+/, "\n");
+            .replace(/\r\n/, '\n')
+            .replace(/\r/, '\n')
+            .replace(/^\n|\n$/, '')
+            .replace(/\n+/, '\n');
 
-        const ep = cert.indexOf(this._PEM_ENDING);
+        const ep = cert.indexOf(this._pemEnding);
 
-        if (!cert.startsWith(this._PEM_START) || ep === -1) {
+        if (!cert.startsWith(this._pemStarting) || ep === -1) {
 
-            throw new this._ERROR();
+            throw new this._error();
         }
 
         return Buffer.from(
             cert.substr(
-                this._PEM_START.length,
-                ep - this._PEM_START.length
-            ).replace(/\n/g, ""),
-            "base64"
+                this._pemStarting.length,
+                ep - this._pemStarting.length
+            ).replace(/\n/g, ''),
+            'base64'
         );
     }
 
     public der2PEM(cert: Buffer): string {
 
         return `${
-            this._PEM_START
+            this._pemStarting
         }\n${
-            cert.toString("base64").replace(/(.{1, 64})/g, "$1\n")
+            cert.toString('base64').replace(/(.{1, 64})/g, '$1\n')
         }\n${
-            this._PEM_ENDING
+            this._pemEnding
         }`;
     }
 }

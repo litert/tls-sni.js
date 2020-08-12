@@ -2,10 +2,11 @@
 /.vscode/
 /.gitignore
 /.npmignore
-/.npmrc
-/tslint.json
+/.eslintrc
+/.eslintignore
+/commitlint.config.js
 /tsconfig.json
 /node_modules/
-/samples/
+/examples/
 /test/
 *.sh

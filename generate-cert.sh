@@ -17,6 +17,7 @@ CERT_DIR=$CERTS_ROOT/$DOMAIN_NAME
 PRIV_KEY_FILE=$CERT_DIR/key.pem
 PUB_KEY_FILE=$CERT_DIR/pub.pem
 CERT_FILE=$CERT_DIR/cert.pem
+CERT_DETAIL_FILE=$CERT_DIR/cert.details.txt
 FULLCHAIN_FILE=$CERT_DIR/fullchain.pem
 CSR_FILE=$CERT_DIR/csr.pem
 CFG_FILE=$CERT_DIR/cert.conf
@@ -90,9 +91,9 @@ openssl req \
 openssl ca \
     -batch \
     -config $CA_CONF_FILE \
-    -out $CERT_FILE \
+    -out $CERT_DETAIL_FILE \
     -infiles $CSR_FILE
 
-cat $CERT_FILE | grep -P '^[^\s]' | grep -P '^(?!Certificate)' > $CERT_FILE
+cat $CERT_DETAIL_FILE | grep -P '^[^\s]' | grep -P '^(?!Certificate)' > $CERT_FILE
 
 cat $CERT_FILE $CA_CERT > $FULLCHAIN_FILE

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import * as C from "./Common";
-import * as DER from "../der";
-import * as RSA from "../rsa";
-import * as O from "../oid";
-import * as E from "../Errors";
-import * as A from "../Abstracts";
+import * as C from './Common';
+import * as DER from '../der';
+import * as RSA from '../rsa';
+import * as O from '../oid';
+import * as E from '../Errors';
+import * as A from '../Abstracts';
 
-const X509_START = "-----BEGIN CERTIFICATE-----";
-const X509_ENDING = "-----END CERTIFICATE-----";
+const X509_START = '-----BEGIN CERTIFICATE-----';
+const X509_ENDING = '-----END CERTIFICATE-----';
 
 class X509Decoder
-extends A.AbstractPEMDecoder
-implements C.IDecoder {
+    extends A.AbstractPEMDecoder
+    implements C.IDecoder {
 
     private _der = DER.createDecoder();
 
@@ -46,7 +46,7 @@ implements C.IDecoder {
                 version: 1,
                 serial: null as any,
                 algorithm: {
-                    name: "",
+                    name: '',
                     args: null
                 },
                 issuer: {},
@@ -57,7 +57,7 @@ implements C.IDecoder {
                 },
                 publicKey: {
                     algorithm: {
-                        name: "",
+                        name: '',
                         args: null
                     },
                     value: null as any
@@ -66,14 +66,14 @@ implements C.IDecoder {
             },
             signature: {
                 algorithm: {
-                    name: "",
+                    name: '',
                     args: null
                 },
                 value: null as any
             }
         };
 
-        if (typeof cert === "string" || this.isPEM(cert)) {
+        if (typeof cert === 'string' || this.isPEM(cert)) {
 
             cert = this.pem2DER(cert);
         }
@@ -125,85 +125,78 @@ implements C.IDecoder {
             }
 
             switch (prop.tag.type) {
-            case 1:
-                ret.details.issuerUniqueID = prop.data.data;
-                break;
-            case 2:
-                ret.details.subjectUniqueID = prop.data.data;
-                break;
-            case 3:
+                case 1:
+                    ret.details.issuerUniqueID = prop.data.data;
+                    break;
+                case 2:
+                    ret.details.subjectUniqueID = prop.data.data;
+                    break;
+                case 3:
 
-                for (let x of prop.data.data) {
+                    for (let x of prop.data.data) {
 
-                    const extInfo: C.IExtensionItem = {
-                        value: null,
-                        critical: x.data.length === 3
-                    };
+                        const extInfo: C.IExtensionItem = {
+                            value: null,
+                            critical: x.data.length === 3 ? x.data[1].data : false
+                        };
 
-                    let extData: DER.IElement;
+                        const extData = (x.data[2] ?? x.data[1]).data;
+                        let extValue: DER.IElement;
 
-                    switch (x.data[0].data) {
-                    case O.X509_EXT_KEY_USAGE:
+                        switch (x.data[0].data) {
+                            case O.X509_EXT_KEY_USAGE:
 
-                        extData = this._der.decode(x.data[2].data);
+                                extValue = this._der.decode(extData);
 
-                        // tslint:disable-next-line:no-bitwise
-                        extInfo.value = extData.data.value[0] >> extData.data.appended;
+                                // tslint:disable-next-line:no-bitwise
+                                extInfo.value = extValue.data.value[0] >> extValue.data.appended;
 
-                        break;
+                                break;
 
-                    case O.X509_EXT_SUBJ_ALTER_NAMES:
+                            case O.X509_EXT_SUBJ_ALTER_NAMES:
 
-                        extData = this._der.decode(x.data[1].data);
-                        extInfo.value = extData.data.map(
-                            (d: DER.IElement) => d.data.toString()
-                        );
+                                extValue = this._der.decode(extData);
+                                extInfo.value = extValue.data.map(
+                                    (d: DER.IElement) => d.data.toString()
+                                );
 
-                        break;
+                                break;
 
-                    case O.X509_EXT_EX_KEY_USAGE:
+                            case O.X509_EXT_EX_KEY_USAGE:
 
-                        extInfo.value = this._der.decode(x.data[1].data).data.map(
-                            (v: any) => v.data
-                        );
+                                extInfo.value = this._der.decode(extData).data.map(
+                                    (v: any) => v.data
+                                );
 
-                        break;
+                                break;
 
-                    case O.X509_EXT_EX_KEY_USAGE:
+                            case O.X509_EXT_BASIC_CONSTRAINTS:
 
-                        extInfo.value = this._der.decode(x.data[1].data).data.map(
-                            (v: any) => v.data
-                        );
+                                extInfo.value = extData;
 
-                        break;
+                                break;
 
-                    case O.X509_EXT_BASIC_CONSTRAINTS:
+                            case O.X509_EXT_SUBJ_IDENTIFIER:
 
-                        extInfo.value = x.data[1].data;
+                                extInfo.value = this._der.decode(extData).data;
 
-                        break;
+                                break;
 
-                    case O.X509_EXT_SUBJ_IDENTIFIER:
+                            default:
 
-                        extInfo.value = this._der.decode(x.data[1].data).data;
+                                extInfo.value = extData;
+                        }
 
-                        break;
-
-                    default:
-
-                        extInfo.value = x.data[extInfo.critical ? 2 : 1].data;
+                        ret.details.extensions[O.oid2Name(x.data[0].data)] = extInfo;
                     }
-
-                    ret.details.extensions[O.oid2Name(x.data[0].data)] = extInfo;
-                }
-                break;
+                    break;
             }
         }
 
         /**
          * If a RSA key is used.
          */
-        if (ret.details.publicKey.algorithm.name.includes("RSA")) {
+        if (ret.details.publicKey.algorithm.name.includes('RSA')) {
 
             const pubKey = this._der.decode(
                 tbsc[6].data[1].data.value
@@ -211,8 +204,8 @@ implements C.IDecoder {
 
             ret.details.publicKey.value = {
 
-                "modulus": pubKey.data[0].data as Buffer,
-                "publicExponent": pubKey.data[1].data
+                'modulus': pubKey.data[0].data as Buffer,
+                'publicExponent': pubKey.data[1].data
             };
         }
         else {

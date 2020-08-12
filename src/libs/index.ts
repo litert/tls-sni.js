@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import * as der from "./der";
-import * as x509 from "./x509";
-import * as rsa from "./rsa";
-import * as certs from "./certs";
+import * as der from './der';
+import * as x509 from './x509';
+import * as rsa from './rsa';
+import * as certs from './certs';
 
 export { der, x509, rsa, certs };

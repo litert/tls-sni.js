@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 // tslint:disable:no-console
 
-import * as libsni from "../libs";
-import * as FS from "fs";
+import * as libsni from '../libs';
+import * as FS from 'fs';
 
 const cm = libsni.certs.createManager();
 
-for (const name of ["a.local.org", "b.local.org", "x.local.org"]) {
+for (const name of ['a.local.org', 'b.local.org', 'x.local.org']) {
 
     const cert = FS.readFileSync(
         `${__dirname}/../test/certs/${name}/fullchain.pem`
@@ -46,13 +46,13 @@ for (const name of ["a.local.org", "b.local.org", "x.local.org"]) {
 }
 
 for (const hostname of [
-    "a.local.org",
-    "b.local.org",
-    "c.local.org",
-    "x.local.org",
-    "local.org",
-    "g.local.org",
-    "dddd.local.org"
+    'a.local.org',
+    'b.local.org',
+    'c.local.org',
+    'x.local.org',
+    'local.org',
+    'g.local.org',
+    'dddd.local.org'
 ]) {
 
     const result = cm.test(hostname);

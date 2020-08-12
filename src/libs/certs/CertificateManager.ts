@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import * as C from "./Common";
-import * as E from "../Errors";
-import * as X509 from "../x509";
-import * as TLS from "tls";
-import * as RSA from "../rsa";
+import * as C from './Common';
+import * as E from '../Errors';
+import * as X509 from '../x509';
+import * as TLS from 'tls';
+import * as RSA from '../rsa';
 
 interface ICertificateInfo {
 
@@ -40,7 +40,7 @@ class CertificateManager implements C.ICertificateManager {
     private _rsaPriv: RSA.IPrivateDecoder;
 
     private _cache!: Record<
-        "simple" | "wildcard",
+        'simple' | 'wildcard',
         Record<string, string>
     >;
 
@@ -60,7 +60,7 @@ class CertificateManager implements C.ICertificateManager {
         this._certs = {};
 
         this._sniCallback = (new Function(
-            `cc`, `cs`, `E`, `return function(subject, cb) {
+            'cc', 'cs', 'E', `return function(subject, cb) {
 
                 subject = subject.toLowerCase();
 
@@ -78,7 +78,7 @@ class CertificateManager implements C.ICertificateManager {
 
                 return cb(new E({ metadata: { subject } }));
             };`
-        ))(this._cache, this._certs, E.E_UNKNOWN_SERVER_NAME) as any;
+        ))(this._cache, this._certs, E.E_UNKNOWN_SERVER_NAME);
     }
 
     public use(
@@ -89,10 +89,10 @@ class CertificateManager implements C.ICertificateManager {
     ): this {
 
         this._certs[name] = {
-            "rawCert": certificate,
-            "privateKey": privateKey,
-            "cert": this._x509.decode(certificate),
-            "context": TLS.createSecureContext({
+            'rawCert': certificate,
+            'privateKey': privateKey,
+            'cert': this._x509.decode(certificate),
+            'context': TLS.createSecureContext({
                 ...extOptions,
                 key: privateKey,
                 cert: certificate
@@ -138,7 +138,7 @@ class CertificateManager implements C.ICertificateManager {
 
         let c = this._x509.decode(cert);
 
-        if (!c.details.publicKey.algorithm.name.includes("RSA")) {
+        if (!c.details.publicKey.algorithm.name.includes('RSA')) {
 
             return false;
         }
@@ -187,7 +187,7 @@ class CertificateManager implements C.ICertificateManager {
          * If not DOT exists in the subject, it will be the whole subject.
          * (-1 plus 1 makes 0)
          */
-        const wsEntry = subject.substr(subject.indexOf(".") + 1);
+        const wsEntry = subject.substr(subject.indexOf('.') + 1);
 
         if (this._cache.wildcard[wsEntry] !== undefined) {
 
@@ -222,8 +222,8 @@ class CertificateManager implements C.ICertificateManager {
         this._cache.simple = {};
         this._cache.wildcard = {};
 
-        const E_CN = "Common Name";
-        const E_SAN = "Subject Alternative Name";
+        const E_CN = 'Common Name';
+        const E_SAN = 'Subject Alternative Name';
 
         for (let name in this._certs) {
 
@@ -233,7 +233,7 @@ class CertificateManager implements C.ICertificateManager {
 
             this._addCache(details.subject[E_CN], name);
 
-            if (details.extensions && details.extensions[E_SAN]) {
+            if (details.extensions?.[E_SAN]) {
 
                 for (const cn of details.extensions[E_SAN].value) {
 
@@ -250,7 +250,7 @@ class CertificateManager implements C.ICertificateManager {
         /**
          * A wildcard subject must start with an asterisk and a dot.
          */
-        if (subject.startsWith("*.")) {
+        if (subject.startsWith('*.')) {
 
             /**
              * Use the part after the first DOT symbol as the entry of the
@@ -261,7 +261,7 @@ class CertificateManager implements C.ICertificateManager {
             /**
              * Only one asterisk is allowed in a subject.
              */
-            if (subject.includes("*")) {
+            if (subject.includes('*')) {
 
                 throw new E.E_INVALID_WILDCARD({ metadata: { subject } });
             }
@@ -273,7 +273,7 @@ class CertificateManager implements C.ICertificateManager {
             /**
              * A wildcard subject must start with an asterisk and a dot.
              */
-            if (subject.includes("*")) {
+            if (subject.includes('*')) {
 
                 throw new E.E_INVALID_WILDCARD({ metadata: { subject } });
             }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Angus.Fenying <fenying@litert.org>
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 // tslint:disable:no-console
 
-import * as SNI from "../libs";
-import * as FS from "fs";
+import * as SNI from '../libs';
+import * as FS from 'fs';
 
 const TEST_CERT = FS.readFileSync(
-    __dirname + "/../test/certs/b.local.org/cert.pem"
+    __dirname + '/../test/certs/b.local.org/cert.pem'
 );
 
 const der = SNI.der.createDecoder();
@@ -31,16 +31,16 @@ SNI.der.print(
     der.decode(x509.pem2DER(TEST_CERT)),
     function(text, depth): void {
 
-        console.log("  ".repeat(depth) + text);
+        console.log('  '.repeat(depth) + text);
     }
 );
 
 const ret = x509.decode(TEST_CERT);
 
 console.log(JSON.stringify(ret, function(k, v): any {
-    if (typeof v === "object" && v !== null && "data" in v && v.type === "Buffer") {
+    if (typeof v === 'object' && v !== null && 'data' in v && v.type === 'Buffer') {
 
-        return Buffer.from(v.data).toString("base64");
+        return Buffer.from(v.data).toString('base64');
     }
     return v;
 }, 2));
