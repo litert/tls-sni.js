@@ -21,6 +21,8 @@ module.exports = {
             'lint',
             'config',
             'branch',
+            'deps',
+            'project',
             'global'
         ]],
         'scope-empty': [2, 'never'],

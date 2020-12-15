@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v0.3.3
+
+- config(deps): updated development deps.
+
 ## v0.3.2
 
 - Fixed the X509 extension decoding.
