@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import * as L from '@litert/core';
+import * as $Exceptions from '@litert/exception';
 
 export class AbstractPEMDecoder {
 
     public constructor(
         private _pemStarting: string,
         private _pemEnding: string,
-        private _error: L.IErrorConstructor<any>
+        private _error: $Exceptions.IExceptionConstructor
     ) {}
 
     public isPEM(cert: Buffer | string): boolean {

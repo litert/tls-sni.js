@@ -51,6 +51,6 @@
     }
   },
   "dependencies": {
-    "@litert/core": "^1.1.1"
+    "@litert/exception": "^1.0.0"
   }
 }

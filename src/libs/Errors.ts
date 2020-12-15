@@ -14,56 +14,62 @@
  * limitations under the License.
  */
 
-import * as Core from '@litert/core';
+import * as $Exceptions from '@litert/exception';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export const ErrorHub = Core.createErrorHub('@litert/tls-sni');
+export const errorRegistry = $Exceptions.createExceptionRegistry({
+    'module': 'televoke.litert.org',
+    'types': {
+        'public': {
+            'index': $Exceptions.createIncreaseCodeIndex(1)
+        }
+    }
+});
 
-export const E_NO_CERT = ErrorHub.define(
-    null,
-    'E_NO_CERT',
-    'The certificate of specific name doesn\'t exists.',
-    {}
-);
+export const E_NO_CERT = errorRegistry.register({
+    name: 'no_cert',
+    message: 'The certificate of specific name doesn\'t exists.',
+    metadata: {},
+    type: 'public'
+});
 
-export const E_UNKNOWN_SERVER_NAME = ErrorHub.define(
-    null,
-    'E_UNKNOWN_SERVER_NAME',
-    'The server name is not allowed.',
-    {}
-);
+export const E_UNKNOWN_SERVER_NAME = errorRegistry.register({
+    name: 'unknown_server_name',
+    message: 'The server name is not allowed.',
+    metadata: {},
+    type: 'public'
+});
 
-export const E_UNEXPECTED_ENDING = ErrorHub.define(
-    null,
-    'E_UNEXPECTED_ENDING',
-    'Unexpected ending of content was found.',
-    {}
-);
+export const E_UNEXPECTED_ENDING = errorRegistry.register({
+    name: 'unexpected_ending',
+    message: 'Unexpected ending of content was found.',
+    metadata: {},
+    type: 'public'
+});
 
-export const E_INVALID_X509 = ErrorHub.define(
-    null,
-    'E_INVALID_X509',
-    'Invalid X.509 certificate.',
-    {}
-);
+export const E_INVALID_X509 = errorRegistry.register({
+    name: 'invalid_x509',
+    message: 'Invalid X.509 certificate.',
+    metadata: {},
+    type: 'public'
+});
 
-export const E_UNSUPPORTED_BER_FEATURE = ErrorHub.define(
-    null,
-    'E_NOT_SUPPORTED_BER_FEATURE',
-    'Unsupported BER feature was found.',
-    {}
-);
+export const E_UNSUPPORTED_BER_FEATURE = errorRegistry.register({
+    name: 'unsupported_ber_feature',
+    message: 'Unsupported BER feature was found.',
+    metadata: {},
+    type: 'public'
+});
 
-export const E_INVALID_WILDCARD = ErrorHub.define(
-    null,
-    'E_INVALID_WILDCARD',
-    'Invalid wildcard subject in certificate.',
-    {}
-);
+export const E_INVALID_WILDCARD = errorRegistry.register({
+    name: 'invalid_wildcard',
+    message: 'Invalid wildcard subject in certificate.',
+    metadata: {},
+    type: 'public'
+});
 
-export const E_INVALID_RSA_KEY = ErrorHub.define(
-    null,
-    'E_INVALID_RSA_KEY',
-    'Invalid RSA key file.',
-    {}
-);
+export const E_INVALID_RSA_KEY = errorRegistry.register({
+    name: 'invalid_rsa_key',
+    message: 'Invalid RSA key file.',
+    metadata: {},
+    type: 'public'
+});

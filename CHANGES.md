@@ -3,6 +3,7 @@
 ## v0.3.3
 
 - config(deps): updated development deps.
+- config(deps): replaced exception with "@litert/exception".
 
 ## v0.3.2
 
