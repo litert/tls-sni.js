@@ -16,7 +16,6 @@
 
 import * as C from './Common';
 import * as DER from '../der';
-import * as RSA from '../rsa';
 import * as O from '../oid';
 import * as E from '../Errors';
 import * as A from '../Abstracts';
@@ -60,7 +59,7 @@ class X509Decoder
                         name: '',
                         args: null
                     },
-                    value: null as any
+                    raw: null as any
                 },
                 extensions: {}
             },
@@ -114,6 +113,8 @@ class X509Decoder
             tbsc[6].data[0],
             ret.details.publicKey.algorithm
         );
+
+        ret.details.publicKey.raw = tbsc[6]; //.data[1].data;
 
         for (let i = 7; i < tbsc.length; i++) {
 
@@ -191,26 +192,6 @@ class X509Decoder
                     }
                     break;
             }
-        }
-
-        /**
-         * If a RSA key is used.
-         */
-        if (ret.details.publicKey.algorithm.name.includes('RSA')) {
-
-            const pubKey = this._der.decode(
-                tbsc[6].data[1].data.value
-            ) as RSA.TRSAPubKey;
-
-            ret.details.publicKey.value = {
-
-                'modulus': pubKey.data[0].data as Buffer,
-                'publicExponent': pubKey.data[1].data
-            };
-        }
-        else {
-
-            ret.details.publicKey.value = tbsc[6].data[1].data;
         }
 
         return ret;

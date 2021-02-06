@@ -38,6 +38,7 @@ class CertificateManager implements C.ICertificateManager {
     private _x509: X509.IDecoder;
 
     private _rsaPriv: RSA.IPrivateDecoder;
+    private _rsaPub: RSA.IPublicDecoder;
 
     private _cache!: Record<
         'simple' | 'wildcard',
@@ -56,6 +57,7 @@ class CertificateManager implements C.ICertificateManager {
         this._x509 = X509.createDecoder();
 
         this._rsaPriv = RSA.createPrivateKeyDecoder();
+        this._rsaPub = RSA.createPublicKeyDecoder();
 
         this._certs = {};
 
@@ -145,11 +147,11 @@ class CertificateManager implements C.ICertificateManager {
 
         try {
 
-            let p = this._rsaPriv.decode(privKey);
+            let privkey = this._rsaPriv.decode(privKey);
 
-            return !(c.details.publicKey.value as any).modulus.compare(
-                p.modulus
-            );
+            const pubKey = this._rsaPub.decodeFromDER(c.details.publicKey.raw);
+
+            return !pubKey.modulus.compare(privkey.modulus);
         }
         catch {
 

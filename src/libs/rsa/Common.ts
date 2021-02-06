@@ -111,6 +111,8 @@ export interface IPrivateDecoder {
 export interface IPublicDecoder {
 
     decode(key: Buffer | string): IPublicKey;
+
+    decodeFromDER(der: any): IPublicKey;
 }
 
 export type TRSAPubKey = TSequence<[

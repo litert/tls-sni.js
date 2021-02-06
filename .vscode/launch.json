@@ -11,8 +11,7 @@
             "program": "${workspaceFolder}/src/examples/01-decoder.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/examples/*.js",
-                "${workspaceFolder}/libs/*.js"
+                "${workspaceFolder}/**/*.js"
             ]
         },
         {
@@ -22,8 +21,7 @@
             "program": "${workspaceFolder}/src/examples/02-certificates.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/examples/*.js",
-                "${workspaceFolder}/libs/*.js"
+                "${workspaceFolder}/**/*.js"
             ]
         },
         {
@@ -33,8 +31,7 @@
             "program": "${workspaceFolder}/src/examples/03-tls-with-sni.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/examples/*.js",
-                "${workspaceFolder}/libs/*.js"
+                "${workspaceFolder}/**/*.js"
             ]
         },
         {
@@ -44,8 +41,7 @@
             "program": "${workspaceFolder}/src/examples/04-https-with-sni.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/examples/*.js",
-                "${workspaceFolder}/libs/*.js"
+                "${workspaceFolder}/**/*.js"
             ]
         },
         {
@@ -55,8 +51,7 @@
             "program": "${workspaceFolder}/src/examples/05-rsa-private-key.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/examples/*.js",
-                "${workspaceFolder}/libs/*.js"
+                "${workspaceFolder}/**/*.js"
             ]
         },
         {
@@ -66,8 +61,7 @@
             "program": "${workspaceFolder}/src/examples/06-rsa-public-key.ts",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/examples/*.js",
-                "${workspaceFolder}/libs/*.js"
+                "${workspaceFolder}/**/*.js"
             ]
         }
     ]

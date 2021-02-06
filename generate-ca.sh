@@ -21,7 +21,7 @@ openssl req \
     -key $CA_PRIV_KEY \
     -out $CA_CERT \
     -days 3650 \
-    -subj "//skip=yes/C=CN/ST=GD/L=Shenzhen/O=Local/OU=Master/CN=ca.local.org"
+    -subj "/C=CN/ST=GD/L=Shenzhen/O=Local/OU=Master/CN=ca.local.org"
 
 # Initialize the CA configuration.
 

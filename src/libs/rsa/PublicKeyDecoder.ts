@@ -49,7 +49,10 @@ class RSAPublicKeyDecoder
             throw new E.E_INVALID_RSA_KEY();
         }
 
-        const derStruct: C.TPublicKeySkeleton = this._der.decode(cert) as any;
+        return this.decodeFromDER(this._der.decode(cert) as any);
+    }
+
+    public decodeFromDER(derStruct: C.TPublicKeySkeleton): C.IPublicKey {
 
         const algo = O.oid2Name(derStruct.data[0].data[0].data);
 
@@ -58,9 +61,7 @@ class RSAPublicKeyDecoder
             throw new E.E_INVALID_RSA_KEY();
         }
 
-        const pubKey = this._der.decode(
-            derStruct.data[1].data.value
-        ) as C.TRSAPubKey;
+        const pubKey = this._der.decode(derStruct.data[1].data.value) as C.TRSAPubKey;
 
         return {
             'modulus': pubKey.data[0].data as Buffer,
