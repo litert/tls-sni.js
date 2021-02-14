@@ -16,27 +16,26 @@
 
 import * as C from './Common';
 import * as DER from '../der';
-import * as O from '../oid';
 import * as E from '../Errors';
 import * as A from '../Abstracts';
 
-const PUB_START = '-----BEGIN PUBLIC KEY-----';
-const PUB_ENDING = '-----END PUBLIC KEY-----';
+const PRIV_START = '-----BEGIN EC PRIVATE KEY-----';
+const PRIV_ENDING = '-----END EC PRIVATE KEY-----';
 
-class RSAPublicKeyDecoder extends A.AbstractPEMDecoder implements C.IPublicDecoder {
+class ECPrivateKeyDecoder extends A.AbstractPEMDecoder implements C.IPrivateDecoder {
 
     private _der = DER.createDecoder();
 
     public constructor() {
 
         super(
-            PUB_START,
-            PUB_ENDING,
-            E.E_INVALID_RSA_KEY
+            PRIV_START,
+            PRIV_ENDING,
+            E.E_INVALID_EC_KEY
         );
     }
 
-    public decode(cert: Buffer | string): C.IPublicKey {
+    public decode(cert: Buffer | string): C.IPrivateKey {
 
         if (typeof cert === 'string' || this.isPEM(cert)) {
 
@@ -44,31 +43,21 @@ class RSAPublicKeyDecoder extends A.AbstractPEMDecoder implements C.IPublicDecod
         }
         else if (!this.isDER(cert)) {
 
-            throw new E.E_INVALID_RSA_KEY();
+            throw new E.E_INVALID_EC_KEY();
         }
 
-        return this.decodeFromDER(this._der.decode(cert) as any);
-    }
-
-    public decodeFromDER(derStruct: C.TPublicKeySkeleton): C.IPublicKey {
-
-        const algo = O.oid2Name(derStruct.data[0].data[0].data);
-
-        if (!algo.includes('RSA')) {
-
-            throw new E.E_INVALID_RSA_KEY();
-        }
-
-        const pubKey = this._der.decode(derStruct.data[1].data.value) as C.TRSAPubKey;
+        const derStruct: C.TPrivateKeySkeleton = this._der.decode(cert) as any;
 
         return {
-            'modulus': pubKey.data[0].data as Buffer,
-            'publicExponent': pubKey.data[1].data
+            'version': derStruct.data[0].data as number,
+            'privateKey': derStruct.data[1].data as Buffer,
+            'namedCurve': derStruct.data[2]?.data?.data,
+            'publicKey': derStruct.data[3]?.data.data.value
         };
     }
 }
 
-export function createPublicKeyDecoder(): C.IPublicDecoder {
+export function createPrivateKeyDecoder(): C.IPrivateDecoder {
 
-    return new RSAPublicKeyDecoder();
+    return new ECPrivateKeyDecoder();
 }

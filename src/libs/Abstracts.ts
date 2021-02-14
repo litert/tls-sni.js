@@ -59,7 +59,7 @@ export class AbstractPEMDecoder {
             cert.substr(
                 this._pemStarting.length,
                 ep - this._pemStarting.length
-            ).replace(/\n/g, ''),
+            ).replace(/\r|\n/g, ''),
             'base64'
         );
     }

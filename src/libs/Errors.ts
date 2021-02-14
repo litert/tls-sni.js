@@ -17,7 +17,7 @@
 import * as $Exceptions from '@litert/exception';
 
 export const errorRegistry = $Exceptions.createExceptionRegistry({
-    'module': 'televoke.litert.org',
+    'module': 'tls-sni.litert.org',
     'types': {
         'public': {
             'index': $Exceptions.createIncreaseCodeIndex(1)
@@ -70,6 +70,13 @@ export const E_INVALID_WILDCARD = errorRegistry.register({
 export const E_INVALID_RSA_KEY = errorRegistry.register({
     name: 'invalid_rsa_key',
     message: 'Invalid RSA key file.',
+    metadata: {},
+    type: 'public'
+});
+
+export const E_INVALID_EC_KEY = errorRegistry.register({
+    name: 'invalid_ec_key',
+    message: 'Invalid EC key file.',
     metadata: {},
     type: 'public'
 });

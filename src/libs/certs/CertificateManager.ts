@@ -19,6 +19,7 @@ import * as E from '../Errors';
 import * as X509 from '../x509';
 import * as TLS from 'tls';
 import * as RSA from '../rsa';
+import * as EC from '../ec';
 
 interface ICertificateInfo {
 
@@ -38,7 +39,12 @@ class CertificateManager implements C.ICertificateManager {
     private _x509: X509.IDecoder;
 
     private _rsaPriv: RSA.IPrivateDecoder;
+
     private _rsaPub: RSA.IPublicDecoder;
+
+    private _ecPriv: EC.IPrivateDecoder;
+
+    private _ecPub: EC.IPublicDecoder;
 
     private _cache!: Record<
         'simple' | 'wildcard',
@@ -58,6 +64,8 @@ class CertificateManager implements C.ICertificateManager {
 
         this._rsaPriv = RSA.createPrivateKeyDecoder();
         this._rsaPub = RSA.createPublicKeyDecoder();
+        this._ecPriv = EC.createPrivateKeyDecoder();
+        this._ecPub = EC.createPublicKeyDecoder();
 
         this._certs = {};
 
@@ -140,18 +148,32 @@ class CertificateManager implements C.ICertificateManager {
 
         let c = this._x509.decode(cert);
 
-        if (!c.details.publicKey.algorithm.name.includes('RSA')) {
+        if (
+            !c.details.publicKey.algorithm.name.includes('RSA')
+            && c.details.publicKey.algorithm.name !== 'ecPublicKey'
+        ) {
 
             return false;
         }
 
         try {
 
-            let privkey = this._rsaPriv.decode(privKey);
+            if (c.details.publicKey.algorithm.name === 'ecPublicKey') {
 
-            const pubKey = this._rsaPub.decodeFromDER(c.details.publicKey.raw);
+                let privkey = this._ecPriv.decode(privKey);
 
-            return !pubKey.modulus.compare(privkey.modulus);
+                const pubKey = this._ecPub.decodeFromDER(c.details.publicKey.raw);
+
+                return !pubKey.publicKey.compare(privkey.publicKey!);
+            }
+            else {
+
+                let privkey = this._rsaPriv.decode(privKey);
+
+                const pubKey = this._rsaPub.decodeFromDER(c.details.publicKey.raw);
+
+                return !pubKey.modulus.compare(privkey.modulus);
+            }
         }
         catch {
 

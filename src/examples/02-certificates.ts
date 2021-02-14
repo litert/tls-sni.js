@@ -21,7 +21,14 @@ import * as FS from 'fs';
 
 const cm = libsni.certs.createManager();
 
-for (const name of ['a.local.org', 'b.local.org', 'x.local.org']) {
+for (const name of [
+    'a.local.org',
+    'b.local.org',
+    'x.local.org',
+    'a.ec.local.org',
+    'b.ec.local.org',
+    'c.ec.local.org',
+]) {
 
     const cert = FS.readFileSync(
         `${__dirname}/../test/certs/${name}/fullchain.pem`
@@ -50,6 +57,12 @@ for (const hostname of [
     'b.local.org',
     'c.local.org',
     'x.local.org',
+    'a.ec.local.org',
+    'b.ec.local.org',
+    'c.ec.local.org',
+    'd.ec.local.org',
+    'e.ec.local.org',
+    'zzz.ec.local.org',
     'local.org',
     'g.local.org',
     'dddd.local.org'

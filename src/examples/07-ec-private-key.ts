@@ -14,9 +14,23 @@
  * limitations under the License.
  */
 
-export * as der from './der';
-export * as x509 from './x509';
-export * as rsa from './rsa';
-export * as ec from './ec';
-export * as certs from './certs';
-export * as oids from './oid';
+// tslint:disable:no-console
+
+import * as libsni from '../libs';
+import * as fs from 'fs';
+
+const dpriv = libsni.ec.createPrivateKeyDecoder();
+
+const priv = dpriv.decode(fs.readFileSync(
+    `${__dirname}/../test/certs/a.ec.local.org/key.pem`
+));
+
+console.log(JSON.stringify(priv, function(k, v): any {
+    if (typeof v === 'object' && v !== null && 'data' in v && v.type === 'Buffer') {
+
+        return Buffer.from(v.data).toString('base64');
+    }
+    return v;
+}, 2));
+
+console.log(`Private Key EC Name: ${libsni.oids.oid2Name(priv.namedCurve!)}`);

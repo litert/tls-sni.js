@@ -22,9 +22,7 @@ import * as A from '../Abstracts';
 const PRIV_START = '-----BEGIN RSA PRIVATE KEY-----';
 const PRIV_ENDING = '-----END RSA PRIVATE KEY-----';
 
-class RSAPrivateKeyDecoder
-    extends A.AbstractPEMDecoder
-    implements C.IPrivateDecoder {
+class RSAPrivateKeyDecoder extends A.AbstractPEMDecoder implements C.IPrivateDecoder {
 
     private _der = DER.createDecoder();
 

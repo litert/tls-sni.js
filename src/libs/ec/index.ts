@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-export * as der from './der';
-export * as x509 from './x509';
-export * as rsa from './rsa';
-export * as ec from './ec';
-export * as certs from './certs';
-export * as oids from './oid';
+export * from './Common';
+export * from './PrivateKeyDecoder';
+export * from './PublicKeyDecoder';

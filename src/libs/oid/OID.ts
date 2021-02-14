@@ -26,6 +26,40 @@ export const X509_EXT_SUBJ_IDENTIFIER = '2.5.29.14';
 
 export const OID_TO_NAME: Record<string, string> = {
 
+    /**
+     * EC OIDs BEGIN {
+     *
+     * @see https://tools.ietf.org/html/rfc5480#section-2.1.1.1
+     */
+    '1.2.840.10045.3.1.1': 'secp192r1/ansip192r1/ansiX9p192r1/prime192v1/P-192',
+    '1.2.840.10045.3.1.7': 'secp256r1/ansip256r1/ansiX9p256r1/prime256v1/P-256',
+    '1.3.132.0.1': 'sect163k1/ansit163k1/ansiX9t163k1',
+    '1.3.132.0.2': 'sect163r1/ansit163r1/ansiX9t163r1',
+    '1.3.132.0.3': 'sect239k1/ansit239k1/ansiX9t239k1',
+    '1.3.132.0.8': 'secp160r1/ansip160r1/ansiX9p160r1/prime160v1/P-160',
+    '1.3.132.0.9': 'secp160k1/ansip160k1/ansiX9p160k1',
+    '1.3.132.0.10': 'secp256k1/ansip256k1/ansiX9p256k1',
+    '1.3.132.0.15': 'sect163r2/ansit163r2/ansiX9t163r2',
+    '1.3.132.0.16': 'sect283k1/ansit283k1/ansiX9t283k1',
+    '1.3.132.0.17': 'sect283r1/ansit283r1/ansiX9t283r1',
+    '1.3.132.0.24': 'sect193r1/ansit193r1/ansiX9t193r1',
+    '1.3.132.0.25': 'sect193r2/ansit193r2/ansiX9t193r2',
+    '1.3.132.0.26': 'sect233k1/ansit233k1/ansiX9t233k1',
+    '1.3.132.0.27': 'sect233r1/ansit233r1/ansiX9t233r1',
+    '1.3.132.0.30': 'secp160r2/ansip160r2/ansiX9p160r2',
+    '1.3.132.0.31': 'secp192k1/ansip192k1/ansiX9p192k1',
+    '1.3.132.0.32': 'secp224k1/ansip224k1/ansiX9p224k1',
+    '1.3.132.0.33': 'secp224r1/ansip224r1/ansiX9p224r1/prime224v1/P-224',
+    '1.3.132.0.34': 'secp384r1/ansip384r1/ansiX9p384r1/prime384v1/P-384',
+    '1.3.132.0.35': 'secp521r1/ansip521r1/ansiX9p521r1/prime521v1/P-521',
+    '1.3.132.0.36': 'sect409k1/ansit409k1/ansiX9t409k1',
+    '1.3.132.0.37': 'sect409r1/ansit409r1/ansiX9t409r1',
+    '1.3.132.0.38': 'sect571k1/ansit571k1/ansiX9t571k1',
+    '1.3.132.0.39': 'sect571r1/ansit571r1/ansiX9t571r1',
+    '1.2.840.10045.2.1': 'ecPublicKey',
+    /**
+     * } // EC OIDs END
+     */
     '1.3.6.1.4.1.11129.2.4.2': 'Certificate Transparency',
     '1.2.840.113549.1.1.1': 'RSA Encryption',
     '1.2.840.113549.1.1.2': 'MD2 With RSA Encryption',

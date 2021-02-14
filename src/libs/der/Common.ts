@@ -106,6 +106,12 @@ export type TSequence<T extends Array<IElement | undefined>> = IElement<
     T
 >;
 
+export type TChoice<T> = IElement<
+    ETClass,
+    ETKind,
+    T
+>;
+
 export type TSet<T extends IElement> = IElement<
     ETClass.UNIVERSAL,
     ETKind.SET,

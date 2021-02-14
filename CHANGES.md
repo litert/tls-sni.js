@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v1.0.0
+
+- feat(ec): added EC keys and certs supports.
+
 ## v0.3.3
 
 - config(deps): updated development deps.

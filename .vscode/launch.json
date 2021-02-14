@@ -63,6 +63,26 @@
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/TLS-SNI.js] Example 07 - EC Private Key",
+            "program": "${workspaceFolder}/src/examples/07-ec-private-key.ts",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/TLS-SNI.js] Example 08 - EC Public Key",
+            "program": "${workspaceFolder}/src/examples/08-ec-public-key.ts",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
         }
     ]
 }

@@ -16,6 +16,7 @@ module.exports = {
             'x509',
             'manager',
             'rsa',
+            'ec',
             'oid',
             'doc',
             'lint',
